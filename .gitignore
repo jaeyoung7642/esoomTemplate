@@ -4,4 +4,3 @@
 # 빌드 결과물 폴더 제외
 target/
 .classpath
-.factorypath
