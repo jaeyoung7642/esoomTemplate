@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminMemberDAO">
+
+
+    <select id="memberList" parameterType="com.esoom.templeate.admin.service.MemberVO" resultType="com.esoom.templeate.admin.service.MemberVO">
+		SELECT *
+		FROM (
+		select num
+		,ROW_NUMBER() OVER (ORDER BY num) AS rownum
+		,id
+		,kcc2022_esoom.egis.FN_MASK_NAME(name) name
+		,CONVERT(char(16),reg_date ,120) reg_date
+		,CONVERT(char(16),logindate ,120) logindate
+		,chk_state
+		from kcc2022_esoom.egis.TBL_MEMBER
+		where 1=1
+		<if test="chk_state != null">
+			<if test='chk_state != "all"'>
+				and chk_state = #{chk_state}
+			</if>
+		</if>
+		<if test="searchKeyword != null">
+			<if test='searchKeyword != ""'>
+				<if test="select != null">
+					<if test='select == "memberName"'>
+						and name like CONCAT('%', #{searchKeyword}, '%')
+					</if>
+					<if test='select == "memberId"'>
+						and id like CONCAT('%', #{searchKeyword}, '%')
+					</if>
+				</if>
+			</if>
+		</if>
+		) A
+		ORDER BY num desc
+	</select>
+	<select id="getMemberListCount" resultType="int">
+		select count(*) from (
+		select *
+		from kcc2022_esoom.egis.TBL_MEMBER
+		where 1=1
+		<if test="chk_state != null">
+			<if test='chk_state != "all"'>
+				and chk_state = #{chk_state}
+			</if>
+		</if>
+		<if test="searchKeyword != null">
+			<if test='searchKeyword != ""'>
+				<if test="select != null">
+					<if test='select == "memberName"'>
+						and name like CONCAT('%', #{searchKeyword}, '%')
+					</if>
+					<if test='select == "memberId"'>
+						and id like CONCAT('%', #{searchKeyword}, '%')
+					</if>
+				</if>
+			</if>
+		</if>
+		) A
+	</select>
+	<select id="selectMemberDetail" resultType="com.esoom.templeate.admin.service.MemberVO">
+		select *
+		,SUBSTRING(CONVERT(char(19),reg_date ,20),0,17) reg_date
+		,SUBSTRING(CONVERT(char(19),logindate ,20),0,17) logindate
+		from kcc2022_esoom.egis.TBL_MEMBER
+		where
+		1=1
+		<if test="num != null">
+			<if test='num != 0'>
+				and num = #{num}
+			</if>
+		</if>
+		<if test="id != null">
+			<if test='id != ""'>
+				and id = #{id}
+			</if>
+		</if>
+	</select>
+	<update id="changePwd" parameterType="com.esoom.templeate.admin.service.MemberVO">
+		update
+		kcc2022_esoom.egis.TBL_MEMBER
+		set sha_pwd = #{sha_pwd}
+		where
+		num= #{num}
+	</update>
+	<update id="updateState" parameterType="com.esoom.templeate.admin.service.MemberVO">
+		update
+		kcc2022_esoom.egis.TBL_MEMBER
+		set chk_state = #{chk_state}
+		where
+		num= #{num}
+	</update>
+</mapper>

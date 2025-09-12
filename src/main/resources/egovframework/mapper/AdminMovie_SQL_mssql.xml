@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminMovieDAO">
+
+
+    <select id="movieList" parameterType="com.esoom.templeate.admin.service.BoardVO" resultType="com.esoom.templeate.admin.service.BoardVO">
+        SELECT *
+		FROM (
+		select a.*,ROW_NUMBER() OVER (ORDER BY num) AS rownum,FORMAT(wdate, 'yyyy-MM-dd') AS formatted_date 
+		from kcc2022_esoom.egis.TBL_NEWS a
+		where 1=1
+		and a.part = 'movie'
+		<if test="searchKeyword != null">
+			<if test='searchKeyword != ""'>
+				and (a.subject like CONCAT('%', #{searchKeyword}, '%') or a.keyword_tag like CONCAT('%', #{searchKeyword}, '%'))
+			</if>
+		</if>
+		<if test="sdate != null and edate !=null">
+			<if test='sdate != "" and edate !=""'>
+				and CONVERT(char(10),a.wdate,23) BETWEEN #{sdate} AND #{edate}
+			</if>
+		</if>
+		) A
+		ORDER BY num desc
+		
+    </select>
+	<select id="getTotalMovieListCount" resultType="int">
+		select count(*)
+		from (
+		select * from kcc2022_esoom.egis.TBL_NEWS
+		where 1=1
+		and part = #{part}
+		) A
+	</select>
+	<select id="getMovieListCount" resultType="int">
+		select count(*) from (select a.* from kcc2022_esoom.egis.TBL_NEWS a
+		where 1=1
+		and a.part = 'movie'
+		<if test="searchKeyword != null">
+			<if test='searchKeyword != ""'>
+				and (a.subject like CONCAT('%', #{searchKeyword}, '%') or a.keyword_tag like CONCAT('%', #{searchKeyword}, '%'))
+			</if>
+		</if>
+		<if test="sdate != null and edate !=null">
+			<if test='sdate != "" and edate !=""'>
+				and CONVERT(char(10),a.wdate,23) BETWEEN #{sdate} AND #{edate}
+			</if>
+		</if>
+		) A
+	</select>
+</mapper>

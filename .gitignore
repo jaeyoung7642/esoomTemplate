@@ -1,0 +1,8 @@
+# 이클립스 설정 파일 제외
+.settings/
+
+# 빌드 결과물 폴더 제외
+target/
+.classpath
+.factorypath
+.project

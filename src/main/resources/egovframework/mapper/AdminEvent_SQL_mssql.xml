@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminEventDAO">
+
+
+    <select id="eventList" parameterType="com.esoom.templeate.admin.service.BoardVO" resultType="com.esoom.templeate.admin.service.BoardVO">
+		SELECT * ,ROW_NUMBER() OVER (ORDER BY num) AS rownum
+		FROM (
+		select a.*
+		,SUBSTRING(CONVERT(char(19),a.sdate ,20),0,17) sdateFormat
+		,SUBSTRING(CONVERT(char(19),a.edate ,20),0,17) edateFormat
+		from kcc2022_esoom.egis.TBL_NEWS a
+		where 1=1
+		and a.part = 'event'
+		<if test="searchKeyword != null">
+			<if test='searchKeyword != ""'>
+				and subject like CONCAT('%', #{searchKeyword}, '%')
+			</if>
+		</if>
+		<if test='state == "ing"'>
+			and GETDATE() BETWEEN sdate and edate
+			and etc2 = 'N'
+		</if>
+		<if test='state == "end"'>
+			<![CDATA[and (GETDATE()  > edate or etc2 ='Y')]]>
+		</if>
+		) A
+		ORDER BY num desc
+	</select>
+	<select id="getEventListCount" resultType="int">
+		select count(*) from (
+		select * from kcc2022_esoom.egis.TBL_NEWS
+		where 1=1
+		and part = 'event'
+		<if test="searchKeyword != null">
+			<if test='searchKeyword != ""'>
+				and subject like CONCAT('%', #{searchKeyword}, '%')
+			</if>
+		</if>
+		<if test='state == "ing"'>
+			and GETDATE() BETWEEN sdate and edate
+			and etc2 = 'N'
+		</if>
+		<if test='state == "end"'>
+			<![CDATA[and (GETDATE()  > edate or etc2 ='Y')]]>
+		</if>
+
+		) A
+	</select>
+	<select id="getEventTailListCount" resultType="int">
+		select count(*)
+		from (
+		select *
+		from kcc2022_esoom.egis.TBL_NEWS_TAIL
+		where info_num = #{num}
+		) A
+	</select>
+	<select id="eventTailList" resultType="map">
+		SELECT *
+		FROM (
+		select num
+		,info_num
+		,id
+		,kcc2022_esoom.egis.FN_MASK_NAME(writer) writer
+		,content
+		from kcc2022_esoom.egis.TBL_NEWS_TAIL
+		where
+		info_num = #{num}
+		) A
+		ORDER BY num 
+		OFFSET (#{currentPage}-1)*#{limit} ROWS
+		FETCH NEXT #{limit} ROWS ONLY
+	</select>
+</mapper>

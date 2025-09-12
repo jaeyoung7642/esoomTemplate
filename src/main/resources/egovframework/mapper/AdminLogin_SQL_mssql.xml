@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminLoginDAO">
+
+	<insert id="insertLoginInfo" parameterType="com.esoom.templeate.admin.service.AdminVO">
+		insert into kcc2022_esoom.egis.TBL_ADMIN_LOG values
+		(
+			#{id},#{ip},getdate()
+		)
+	</insert>
+	<select id="getAdmin" resultType="com.esoom.templeate.admin.service.AdminVO">
+		SELECT * FROM
+		kcc2022_esoom.egis.TBL_ADMIN
+		WHERE id = #{id}
+	</select>
+</mapper>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminNoticeDAO">
+
+
+    <select id="noticeList" parameterType="com.esoom.templeate.admin.service.BoardVO" resultType="com.esoom.templeate.admin.service.BoardVO">
+          select 
+		ROW_NUMBER() OVER (ORDER BY num) AS rownum,
+		*,FORMAT(wdate, 'yyyy-MM-dd HH:mm') AS formatted_date from
+		kcc2022_esoom.egis.TBL_NEWS
+		where 1=1
+		and part = 'notice'
+		<if test="searchKeyword != null">
+			<if test='searchKeyword != ""'>
+				and subject like CONCAT('%', #{searchKeyword}, '%')
+			</if>
+		</if>
+		<if test="flag != null">
+			and flag=#{flag}
+		</if>
+		order by num desc
+    </select>
+	<select id="getTotalNoticeListCount" resultType="int">
+		select count(*)
+		from (
+		select * from kcc2022_esoom.egis.TBL_NEWS
+		where 1=1
+		and part = #{part}
+		) A
+	</select>
+	<select id="getNoticeListCount" resultType="int">
+		select count(*) from (
+		select * from kcc2022_esoom.egis.TBL_NEWS
+		where 1=1
+		and part = 'notice'
+		<if test="searchKeyword != null">
+			<if test='searchKeyword != ""'>
+				and subject like CONCAT('%', #{searchKeyword}, '%')
+			</if>
+		</if>
+		<if test="flag != null">
+			and flag = #{flag}
+		</if>
+		) A
+	</select>
+	<select id="selectBoardDetail" resultType="com.esoom.templeate.admin.service.BoardVO">
+		select *
+		,CONVERT(char(10),sdate ,23) AS sDay
+		,SUBSTRING(CONVERT(char(8),sdate ,24),0,3) AS sTime
+		,SUBSTRING(CONVERT(char(8),sdate ,24),4,2) AS sMinute
+		,CONVERT(char(10),edate ,23) AS eDay
+		,SUBSTRING(CONVERT(char(8),edate ,24),0,3) AS eTime
+		,SUBSTRING(CONVERT(char(8),edate ,24),4,2) AS eMinute
+		,FORMAT(wdate, 'yyyy-MM-dd HH:mm') AS formatted_date
+		from kcc2022_esoom.egis.TBL_NEWS
+		where
+		num = #{num}
+	</select>
+	<select id="lastBoard" resultType="com.esoom.templeate.admin.service.BoardVO">
+		select top 1 * from
+		kcc2022_esoom.egis.TBL_NEWS order by num desc
+	</select>
+	<update id="mergeBoard" parameterType="com.esoom.templeate.admin.service.BoardVO">
+		merge into
+		kcc2022_esoom.egis.TBL_NEWS A
+		using
+		(
+		select #{num} AS num
+		,#{subject} AS subject
+		,#{content} AS content
+		,#{summary} AS summary
+		,#{visited} AS visited
+		,#{flag} AS flag
+		,#{part} AS part
+		,#{wtype} AS wtype
+		,#{linkurl} AS linkurl
+		,#{etc1} AS etc1
+		,#{etc2} AS etc2
+		,#{sdate} AS sdate
+		,#{edate} AS edate
+		,#{img1} AS img1
+		,#{img2} AS img2
+		) B
+		on A.num = B.num
+		WHEN MATCHED THEN
+		UPDATE set
+		A.subject = B.subject
+		,A.content = B.content
+		,A.summary = B.summary
+		,A.visited = B.visited
+		,A.flag = B.flag
+		,A.part = B.part
+		,A.wtype = B.wtype
+		,A.linkurl = B.linkurl
+		,A.etc1 = B.etc1
+		,A.etc2 = B.etc2
+		,A.sdate = B.sdate
+		,A.edate = B.edate
+		,A.img1 = B.img1
+		,A.img2 = B.img2
+		WHEN not MATCHED THEN
+		INSERT (
+		subject
+		,content
+		,summary
+		,visited
+		,flag
+		,part
+		,linkurl
+		,wtype
+		,etc1
+		,etc2
+		,sdate
+		,edate
+		,img1
+		,img2
+		,wdate
+		)
+		values (
+		B.subject
+		,B.content
+		,B.summary
+		,B.visited
+		,B.flag
+		,B.part
+		,B.linkurl
+		,B.wtype
+		,B.etc1
+		,B.etc2
+		,B.sdate
+		,B.edate
+		,B.img1
+		,B.img2
+		,getdate()
+		);
+
+	</update>
+	
+	<delete id="deleteBoard" parameterType="com.esoom.templeate.admin.service.BoardVO">
+		delete
+		kcc2022_esoom.egis.TBL_NEWS
+		where num = #{num}
+	</delete>
+</mapper>

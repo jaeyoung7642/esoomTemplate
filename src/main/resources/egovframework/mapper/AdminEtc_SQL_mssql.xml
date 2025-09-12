@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminEtcDAO">
+
+
+    <select id="popupList" parameterType="com.esoom.templeate.admin.service.PopupVO" resultType="com.esoom.templeate.admin.service.PopupVO">
+		SELECT *
+		FROM (
+		select num
+		,subject
+		,pop_img
+		,main_chk
+		,[order]
+		,SUBSTRING(CONVERT(char(19),sdate ,20),0,17) sdate
+		,SUBSTRING(CONVERT(char(19),edate ,20),0,17) edate
+		,FORMAT(wdate, 'yyyy-MM-dd HH:mm') AS formatted_date
+		from kcc2022_esoom.egis.TBL_POPUP
+		) A
+		ORDER BY main_chk desc,-[order] desc,num desc
+	</select>
+	<select id="getPopupListCount" resultType="int">
+		select count(*) from (
+		select * from kcc2022_esoom.egis.TBL_POPUP
+		) A
+	</select>
+	<select id="selectPopupDetail" resultType="com.esoom.templeate.admin.service.PopupVO">
+		select num
+		,subject
+		,pop_img
+		,pop_img2
+		,map_chk
+		,map_target
+		,map_url
+		,main_chk
+		,[order]
+		,CONVERT(char(10),sdate ,23) sDay
+		,SUBSTRING(CONVERT(char(8),sdate ,24),0,3) sTime
+		,SUBSTRING(CONVERT(char(8),sdate ,24),4,2) sMinute
+		,CONVERT(char(10),edate ,23) eDay
+		,SUBSTRING(CONVERT(char(8),edate ,24),0,3) eTime
+		,SUBSTRING(CONVERT(char(8),edate ,24),4,2) eMinute
+		from kcc2022_esoom.egis.TBL_POPUP
+		where
+		num = #{num}
+	</select>
+	<update id="mergePopup" parameterType="com.esoom.templeate.admin.service.PopupVO">
+		merge into
+		kcc2022_esoom.egis.TBL_POPUP A
+		using
+		(
+		select #{num} AS num
+		,#{subject} AS subject
+		,#{map_chk} AS map_chk
+		,#{map_target} AS map_target
+		,#{map_url} AS map_url
+		,#{order} AS [order]
+		,#{main_chk} AS main_chk
+		,#{sdate} AS sdate
+		,#{edate} AS edate
+		,#{pop_img} AS pop_img
+		,#{pop_img2} AS pop_img2
+		) B
+		on A.num = B.num
+		WHEN MATCHED THEN
+		UPDATE set
+		A.subject = B.subject
+		,A.map_chk = B.map_chk
+		,A.map_target = B.map_target
+		,A.map_url = B.map_url
+		,A.[order] = B.[order]
+		,A.main_chk = B.main_chk
+		,A.sdate = B.sdate
+		,A.edate = B.edate
+		,A.pop_img = B.pop_img
+		,A.pop_img2 = B.pop_img2
+		WHEN not MATCHED THEN
+		INSERT (
+		subject
+		,map_chk
+		,map_target
+		,map_url
+		,[order]
+		,main_chk
+		,sdate
+		,edate
+		,pop_img
+		,pop_img2
+		,wdate
+		)
+		values (
+		B.subject
+		,B.map_chk
+		,B.map_target
+		,B.map_url
+		,B.[order]
+		,B.main_chk
+		,B.sdate
+		,B.edate
+		,B.pop_img
+		,B.pop_img2
+		,getdate()
+		);
+
+	</update>
+	<select id="mainChkCount" resultType="int">
+		select count(*) from (
+		select * from kcc2022_esoom.egis.TBL_POPUP
+		where main_chk = 'Y'
+		and num != #{num}
+		) A
+	</select>
+	<delete id="deletePopup" parameterType="com.esoom.templeate.admin.service.PopupVO">
+		delete
+		kcc2022_esoom.egis.TBL_POPUP
+		where num = #{num}
+	</delete>
+	
+	<select id="slideList" resultType="com.esoom.templeate.admin.service.SlideVO">
+		SELECT *
+		FROM (
+		select num
+		,title
+		,img1
+		,use_yn
+		,banner_order
+		,FORMAT(reg_date, 'yyyy-MM-dd HH:mm') AS reg_date
+		from kcc2022_esoom.egis.TBL_MAIN_BANNER
+		) A
+		ORDER BY use_yn desc,-banner_order desc,num desc
+	</select>
+	<select id="getSlideListCount" resultType="int">
+		select count(*)
+		from (
+		select * from kcc2022_esoom.egis.TBL_MAIN_BANNER
+		) A
+	</select>
+	<select id="selectSlideDetail" resultType="com.esoom.templeate.admin.service.SlideVO">
+		select * from
+		kcc2022_esoom.egis.TBL_MAIN_BANNER
+		where
+		num = #{num}
+	</select>
+	<update id="mergeSlide" parameterType="com.esoom.templeate.admin.service.SlideVO">
+		merge into
+		kcc2022_esoom.egis.TBL_MAIN_BANNER A
+		using
+		(
+		select #{num} AS num
+		,#{title} AS title
+		,#{links} AS links
+		,#{use_yn} AS use_yn
+		,#{banner_order} AS banner_order
+		,#{img1} AS img1
+		,#{img2} AS img2
+		) B
+		on A.num = B.num
+		WHEN MATCHED THEN
+		UPDATE set
+		A.title = B.title
+		,A.links = B.links
+		,A.use_yn = B.use_yn
+		,A.banner_order = B.banner_order
+		,A.img1 = B.img1
+		,A.img2 = B.img2
+		WHEN not MATCHED THEN
+		INSERT (
+		title
+		,links
+		,use_yn
+		,banner_order
+		,img1
+		,img2
+		,reg_date
+		)
+		values (
+		B.title
+		,B.links
+		,B.use_yn
+		,B.banner_order
+		,B.img1
+		,B.img2
+		,getdate()
+		);
+	</update>
+	<select id="useYnCount" resultType="int">
+		select count(*) from (
+		select * from kcc2022_esoom.egis.TBL_MAIN_BANNER
+		where use_yn = 'Y'
+		and num != #{num}
+		) A
+	</select>
+	<delete id="deleteSlide" parameterType="com.esoom.templeate.admin.service.SlideVO">
+		delete
+		kcc2022_esoom.egis.TBL_MAIN_BANNER
+		where num = #{num}
+	</delete>
+</mapper>
