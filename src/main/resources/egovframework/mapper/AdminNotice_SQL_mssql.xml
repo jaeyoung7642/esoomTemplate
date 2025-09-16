@@ -8,7 +8,7 @@
           select 
 		ROW_NUMBER() OVER (ORDER BY num) AS rownum,
 		*,FORMAT(wdate, 'yyyy-MM-dd HH:mm') AS formatted_date from
-		kcc2022_esoom.egis.TBL_NEWS
+		KCC_EGIS.egis.TBL_NEWS
 		where 1=1
 		and part = 'notice'
 		<if test="searchKeyword != null">
@@ -24,14 +24,14 @@
 	<select id="getTotalNoticeListCount" resultType="int">
 		select count(*)
 		from (
-		select * from kcc2022_esoom.egis.TBL_NEWS
+		select * from KCC_EGIS.egis.TBL_NEWS
 		where 1=1
 		and part = #{part}
 		) A
 	</select>
 	<select id="getNoticeListCount" resultType="int">
 		select count(*) from (
-		select * from kcc2022_esoom.egis.TBL_NEWS
+		select * from KCC_EGIS.egis.TBL_NEWS
 		where 1=1
 		and part = 'notice'
 		<if test="searchKeyword != null">
@@ -53,17 +53,17 @@
 		,SUBSTRING(CONVERT(char(8),edate ,24),0,3) AS eTime
 		,SUBSTRING(CONVERT(char(8),edate ,24),4,2) AS eMinute
 		,FORMAT(wdate, 'yyyy-MM-dd HH:mm') AS formatted_date
-		from kcc2022_esoom.egis.TBL_NEWS
+		from KCC_EGIS.egis.TBL_NEWS
 		where
 		num = #{num}
 	</select>
 	<select id="lastBoard" resultType="com.esoom.templeate.admin.service.BoardVO">
 		select top 1 * from
-		kcc2022_esoom.egis.TBL_NEWS order by num desc
+		KCC_EGIS.egis.TBL_NEWS order by num desc
 	</select>
 	<update id="mergeBoard" parameterType="com.esoom.templeate.admin.service.BoardVO">
 		merge into
-		kcc2022_esoom.egis.TBL_NEWS A
+		KCC_EGIS.egis.TBL_NEWS A
 		using
 		(
 		select #{num} AS num
@@ -139,7 +139,7 @@
 	
 	<delete id="deleteBoard" parameterType="com.esoom.templeate.admin.service.BoardVO">
 		delete
-		kcc2022_esoom.egis.TBL_NEWS
+		KCC_EGIS.egis.TBL_NEWS
 		where num = #{num}
 	</delete>
 </mapper>

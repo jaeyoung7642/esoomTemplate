@@ -8,7 +8,7 @@
         SELECT *
 		FROM (
 		select a.*,ROW_NUMBER() OVER (ORDER BY num) AS rownum,FORMAT(wdate, 'yyyy-MM-dd') AS formatted_date 
-		from kcc2022_esoom.egis.TBL_NEWS a
+		from KCC_EGIS.egis.TBL_NEWS a
 		where 1=1
 		and a.part = 'photo'
 		<if test="searchKeyword != null">
@@ -28,13 +28,13 @@
 	<select id="getTotalPhotoListCount" resultType="int">
 		select count(*)
 		from (
-		select * from kcc2022_esoom.egis.TBL_NEWS
+		select * from KCC_EGIS.egis.TBL_NEWS
 		where 1=1
 		and part = #{part}
 		) A
 	</select>
 	<select id="getPhotoListCount" resultType="int">
-		select count(*) from (select a.* from kcc2022_esoom.egis.TBL_NEWS a
+		select count(*) from (select a.* from KCC_EGIS.egis.TBL_NEWS a
 		where 1=1
 		and a.part = 'photo'
 		<if test="searchKeyword != null">
@@ -51,7 +51,7 @@
 	</select>
 	<select id="boardPhotoList" resultType="com.esoom.templeate.admin.service.BoardPhotoVO">
 		select * from
-		kcc2022_esoom.egis.TBL_NEWS_PHOTO
+		KCC_EGIS.egis.TBL_NEWS_PHOTO
 		where 1=1
 		and info_num =#{num}
 		order by
@@ -59,7 +59,7 @@
 	</select>
 	<update id="boardPhotoMerge" parameterType="com.esoom.templeate.admin.service.BoardPhotoVO">
 		merge into
-		kcc2022_esoom.egis.TBL_NEWS_PHOTO A
+		KCC_EGIS.egis.TBL_NEWS_PHOTO A
 		using
 		(
 		select #{num} AS num
@@ -85,7 +85,7 @@
 	</update>
 	<delete id="deleteBoardPhoto" parameterType="com.esoom.templeate.admin.service.BoardPhotoVO">
 		delete from
-		kcc2022_esoom.egis.TBL_NEWS_PHOTO
+		KCC_EGIS.egis.TBL_NEWS_PHOTO
 		where num = #{num}
 	</delete>
 </mapper>

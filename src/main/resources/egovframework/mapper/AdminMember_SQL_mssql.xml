@@ -10,11 +10,11 @@
 		select num
 		,ROW_NUMBER() OVER (ORDER BY num) AS rownum
 		,id
-		,kcc2022_esoom.egis.FN_MASK_NAME(name) name
+		,KCC_EGIS.egis.FN_MASK_NAME(name) name
 		,CONVERT(char(16),reg_date ,120) reg_date
 		,CONVERT(char(16),logindate ,120) logindate
 		,chk_state
-		from kcc2022_esoom.egis.TBL_MEMBER
+		from KCC_EGIS.egis.TBL_MEMBER
 		where 1=1
 		<if test="chk_state != null">
 			<if test='chk_state != "all"'>
@@ -39,7 +39,7 @@
 	<select id="getMemberListCount" resultType="int">
 		select count(*) from (
 		select *
-		from kcc2022_esoom.egis.TBL_MEMBER
+		from KCC_EGIS.egis.TBL_MEMBER
 		where 1=1
 		<if test="chk_state != null">
 			<if test='chk_state != "all"'>
@@ -64,7 +64,7 @@
 		select *
 		,SUBSTRING(CONVERT(char(19),reg_date ,20),0,17) reg_date
 		,SUBSTRING(CONVERT(char(19),logindate ,20),0,17) logindate
-		from kcc2022_esoom.egis.TBL_MEMBER
+		from KCC_EGIS.egis.TBL_MEMBER
 		where
 		1=1
 		<if test="num != null">
@@ -80,14 +80,14 @@
 	</select>
 	<update id="changePwd" parameterType="com.esoom.templeate.admin.service.MemberVO">
 		update
-		kcc2022_esoom.egis.TBL_MEMBER
+		KCC_EGIS.egis.TBL_MEMBER
 		set sha_pwd = #{sha_pwd}
 		where
 		num= #{num}
 	</update>
 	<update id="updateState" parameterType="com.esoom.templeate.admin.service.MemberVO">
 		update
-		kcc2022_esoom.egis.TBL_MEMBER
+		KCC_EGIS.egis.TBL_MEMBER
 		set chk_state = #{chk_state}
 		where
 		num= #{num}

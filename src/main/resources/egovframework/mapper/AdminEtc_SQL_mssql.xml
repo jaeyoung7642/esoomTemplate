@@ -15,13 +15,13 @@
 		,SUBSTRING(CONVERT(char(19),sdate ,20),0,17) sdate
 		,SUBSTRING(CONVERT(char(19),edate ,20),0,17) edate
 		,FORMAT(wdate, 'yyyy-MM-dd HH:mm') AS formatted_date
-		from kcc2022_esoom.egis.TBL_POPUP
+		from KCC_EGIS.egis.TBL_POPUP
 		) A
 		ORDER BY main_chk desc,-[order] desc,num desc
 	</select>
 	<select id="getPopupListCount" resultType="int">
 		select count(*) from (
-		select * from kcc2022_esoom.egis.TBL_POPUP
+		select * from KCC_EGIS.egis.TBL_POPUP
 		) A
 	</select>
 	<select id="selectPopupDetail" resultType="com.esoom.templeate.admin.service.PopupVO">
@@ -40,13 +40,13 @@
 		,CONVERT(char(10),edate ,23) eDay
 		,SUBSTRING(CONVERT(char(8),edate ,24),0,3) eTime
 		,SUBSTRING(CONVERT(char(8),edate ,24),4,2) eMinute
-		from kcc2022_esoom.egis.TBL_POPUP
+		from KCC_EGIS.egis.TBL_POPUP
 		where
 		num = #{num}
 	</select>
 	<update id="mergePopup" parameterType="com.esoom.templeate.admin.service.PopupVO">
 		merge into
-		kcc2022_esoom.egis.TBL_POPUP A
+		KCC_EGIS.egis.TBL_POPUP A
 		using
 		(
 		select #{num} AS num
@@ -105,14 +105,14 @@
 	</update>
 	<select id="mainChkCount" resultType="int">
 		select count(*) from (
-		select * from kcc2022_esoom.egis.TBL_POPUP
+		select * from KCC_EGIS.egis.TBL_POPUP
 		where main_chk = 'Y'
 		and num != #{num}
 		) A
 	</select>
 	<delete id="deletePopup" parameterType="com.esoom.templeate.admin.service.PopupVO">
 		delete
-		kcc2022_esoom.egis.TBL_POPUP
+		KCC_EGIS.egis.TBL_POPUP
 		where num = #{num}
 	</delete>
 	
@@ -125,25 +125,25 @@
 		,use_yn
 		,banner_order
 		,FORMAT(reg_date, 'yyyy-MM-dd HH:mm') AS reg_date
-		from kcc2022_esoom.egis.TBL_MAIN_BANNER
+		from KCC_EGIS.egis.TBL_MAIN_BANNER
 		) A
 		ORDER BY use_yn desc,-banner_order desc,num desc
 	</select>
 	<select id="getSlideListCount" resultType="int">
 		select count(*)
 		from (
-		select * from kcc2022_esoom.egis.TBL_MAIN_BANNER
+		select * from KCC_EGIS.egis.TBL_MAIN_BANNER
 		) A
 	</select>
 	<select id="selectSlideDetail" resultType="com.esoom.templeate.admin.service.SlideVO">
 		select * from
-		kcc2022_esoom.egis.TBL_MAIN_BANNER
+		KCC_EGIS.egis.TBL_MAIN_BANNER
 		where
 		num = #{num}
 	</select>
 	<update id="mergeSlide" parameterType="com.esoom.templeate.admin.service.SlideVO">
 		merge into
-		kcc2022_esoom.egis.TBL_MAIN_BANNER A
+		KCC_EGIS.egis.TBL_MAIN_BANNER A
 		using
 		(
 		select #{num} AS num
@@ -185,14 +185,14 @@
 	</update>
 	<select id="useYnCount" resultType="int">
 		select count(*) from (
-		select * from kcc2022_esoom.egis.TBL_MAIN_BANNER
+		select * from KCC_EGIS.egis.TBL_MAIN_BANNER
 		where use_yn = 'Y'
 		and num != #{num}
 		) A
 	</select>
 	<delete id="deleteSlide" parameterType="com.esoom.templeate.admin.service.SlideVO">
 		delete
-		kcc2022_esoom.egis.TBL_MAIN_BANNER
+		KCC_EGIS.egis.TBL_MAIN_BANNER
 		where num = #{num}
 	</delete>
 </mapper>

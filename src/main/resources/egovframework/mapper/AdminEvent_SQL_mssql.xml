@@ -10,7 +10,7 @@
 		select a.*
 		,SUBSTRING(CONVERT(char(19),a.sdate ,20),0,17) sdateFormat
 		,SUBSTRING(CONVERT(char(19),a.edate ,20),0,17) edateFormat
-		from kcc2022_esoom.egis.TBL_NEWS a
+		from KCC_EGIS.egis.TBL_NEWS a
 		where 1=1
 		and a.part = 'event'
 		<if test="searchKeyword != null">
@@ -30,7 +30,7 @@
 	</select>
 	<select id="getEventListCount" resultType="int">
 		select count(*) from (
-		select * from kcc2022_esoom.egis.TBL_NEWS
+		select * from KCC_EGIS.egis.TBL_NEWS
 		where 1=1
 		and part = 'event'
 		<if test="searchKeyword != null">
@@ -52,7 +52,7 @@
 		select count(*)
 		from (
 		select *
-		from kcc2022_esoom.egis.TBL_NEWS_TAIL
+		from KCC_EGIS.egis.TBL_NEWS_TAIL
 		where info_num = #{num}
 		) A
 	</select>
@@ -62,9 +62,9 @@
 		select num
 		,info_num
 		,id
-		,kcc2022_esoom.egis.FN_MASK_NAME(writer) writer
+		,KCC_EGIS.egis.FN_MASK_NAME(writer) writer
 		,content
-		from kcc2022_esoom.egis.TBL_NEWS_TAIL
+		from KCC_EGIS.egis.TBL_NEWS_TAIL
 		where
 		info_num = #{num}
 		) A

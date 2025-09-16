@@ -9,19 +9,19 @@
 			FROM (	
 					select A.*
 					, FORMAT(A.wdate, 'yyyy-MM-dd HH:mm') AS formatted_date
-					, kcc2022_esoom.egis.FN_MASK_NAME(writer) writer2
-					, (SELECT COUNT(*) FROM kcc2022_esoom.egis.TBL_FREE_TAIL b WHERE b.info_num = A.num) AS tail_count
+					, KCC_EGIS.egis.FN_MASK_NAME(writer) writer2
+					, (SELECT COUNT(*) FROM KCC_EGIS.egis.TBL_FREE_TAIL b WHERE b.info_num = A.num) AS tail_count
 					, ROW_NUMBER() OVER (PARTITION BY A.num ORDER BY A.num) AS SEQ
 					from (
 							select a.*
-							from kcc2022_esoom.egis.TBL_FREE a 
+							from KCC_EGIS.egis.TBL_FREE a 
 							where 1=2 
 							and a.chk_del = 'N'
 							
 							<if test='searchTitle =="Y"'>
 								union all
 								select a.*
-								from kcc2022_esoom.egis.TBL_FREE a 
+								from KCC_EGIS.egis.TBL_FREE a 
 								where 1=1 
 								<if test="searchChk_del != null">
 									<if test='searchChk_del != "all"'>
@@ -37,7 +37,7 @@
 							<if test='searchContent =="Y"'>
 								union all
 								select a.*
-								from kcc2022_esoom.egis.TBL_FREE a 
+								from KCC_EGIS.egis.TBL_FREE a 
 								where 1=1 
 								<if test="searchChk_del != null">
 									<if test='searchChk_del != "all"'>
@@ -53,7 +53,7 @@
 							<if test='searchWriter =="Y"'>
 								union all
 								select a.*
-								from kcc2022_esoom.egis.TBL_FREE a 
+								from KCC_EGIS.egis.TBL_FREE a 
 								where 1=1 
 								<if test="searchChk_del != null">
 									<if test='searchChk_del != "all"'>
@@ -69,7 +69,7 @@
 							<if test='searchTail =="Y"'>
 								union all
 								select a.*
-								from kcc2022_esoom.egis.TBL_FREE a 
+								from KCC_EGIS.egis.TBL_FREE a 
 								where 1=1 
 								<if test="searchChk_del != null">
 									<if test='searchChk_del != "all"'>
@@ -78,14 +78,14 @@
 								</if>
 								<if test="searchKeyword != null">
 									<if test='searchKeyword != ""'>
-										and a.num in (select distinct info_num FROM kcc2022_esoom.egis.TBL_FREE_TAIL where CONTAINS(content, #{searchKeyword}))
+										and a.num in (select distinct info_num FROM KCC_EGIS.egis.TBL_FREE_TAIL where CONTAINS(content, #{searchKeyword}))
 									</if>
 								</if>
 							</if>
 							<if test='searchTailWriter =="Y"'>
 								union all
 								select a.*
-								from kcc2022_esoom.egis.TBL_FREE a 
+								from KCC_EGIS.egis.TBL_FREE a 
 								where 1=1 
 								<if test="searchChk_del != null">
 									<if test='searchChk_del != "all"'>
@@ -94,7 +94,7 @@
 								</if>
 								<if test="searchKeyword != null">
 									<if test='searchKeyword != ""'>
-										and a.num in (select distinct info_num FROM kcc2022_esoom.egis.TBL_FREE_TAIL where writer LIKE CONCAT('%', #{searchKeyword}, '%'))
+										and a.num in (select distinct info_num FROM KCC_EGIS.egis.TBL_FREE_TAIL where writer LIKE CONCAT('%', #{searchKeyword}, '%'))
 									</if>
 								</if>
 							</if>
@@ -105,7 +105,7 @@
 							                <if test='searchTailWriter == "N"'>
 												union all
 												select a.*
-												from kcc2022_esoom.egis.TBL_FREE a 
+												from KCC_EGIS.egis.TBL_FREE a 
 												where 1=1 
 												<if test="chk_del != null">
 													<if test='chk_del != "all"'>
@@ -128,20 +128,20 @@
 			FROM (	
 					select A.*
 					, FORMAT(a.wdate, 'yyyy.MM.dd') AS reg_date
-					, kcc2022_esoom.egis.FN_MASK_NAME(writer) writer2
+					, KCC_EGIS.egis.FN_MASK_NAME(writer) writer2
 					, ROW_NUMBER() OVER (ORDER BY a.num) AS rownum
-					, (SELECT COUNT(*) FROM kcc2022_esoom.egis.TBL_FREE_TAIL b WHERE b.info_num = a.num) AS tail_count
+					, (SELECT COUNT(*) FROM KCC_EGIS.egis.TBL_FREE_TAIL b WHERE b.info_num = a.num) AS tail_count
 					, ROW_NUMBER() OVER (PARTITION BY A.num ORDER BY A.num) AS SEQ
 					from (
 							select a.*
-							from kcc2022_esoom.egis.TBL_FREE a 
+							from KCC_EGIS.egis.TBL_FREE a 
 							where 1=2 
 							and a.chk_del = 'N'
 							
 							<if test='searchTitle =="Y"'>
 								union all
 								select a.*
-								from kcc2022_esoom.egis.TBL_FREE a 
+								from KCC_EGIS.egis.TBL_FREE a 
 								where 1=1 
 								<if test="searchChk_del != null">
 									<if test='searchChk_del != "all"'>
@@ -157,7 +157,7 @@
 							<if test='searchContent =="Y"'>
 								union all
 								select a.*
-								from kcc2022_esoom.egis.TBL_FREE a 
+								from KCC_EGIS.egis.TBL_FREE a 
 								where 1=1 
 								<if test="searchChk_del != null">
 									<if test='searchChk_del != "all"'>
@@ -173,7 +173,7 @@
 							<if test='searchWriter =="Y"'>
 								union all
 								select a.*
-								from kcc2022_esoom.egis.TBL_FREE a 
+								from KCC_EGIS.egis.TBL_FREE a 
 								where 1=1 
 								<if test="searchChk_del != null">
 									<if test='searchChk_del != "all"'>
@@ -189,7 +189,7 @@
 							<if test='searchTail =="Y"'>
 								union all
 								select a.*
-								from kcc2022_esoom.egis.TBL_FREE a 
+								from KCC_EGIS.egis.TBL_FREE a 
 								where 1=1 
 								<if test="searchChk_del != null">
 									<if test='searchChk_del != "all"'>
@@ -198,14 +198,14 @@
 								</if>
 								<if test="searchKeyword != null">
 									<if test='searchKeyword != ""'>
-										and a.num in (select distinct info_num FROM kcc2022_esoom.egis.TBL_FREE_TAIL where CONTAINS(content, #{searchKeyword}))
+										and a.num in (select distinct info_num FROM KCC_EGIS.egis.TBL_FREE_TAIL where CONTAINS(content, #{searchKeyword}))
 									</if>
 								</if>
 							</if>
 							<if test='searchTailWriter =="Y"'>
 								union all
 								select a.*
-								from kcc2022_esoom.egis.TBL_FREE a 
+								from KCC_EGIS.egis.TBL_FREE a 
 								where 1=1 
 								<if test="searchChk_del != null">
 									<if test='searchChk_del != "all"'>
@@ -214,7 +214,7 @@
 								</if>
 								<if test="searchKeyword != null">
 									<if test='searchKeyword != ""'>
-										and a.num in (select distinct info_num FROM kcc2022_esoom.egis.TBL_FREE_TAIL where writer LIKE CONCAT('%', #{searchKeyword}, '%'))
+										and a.num in (select distinct info_num FROM KCC_EGIS.egis.TBL_FREE_TAIL where writer LIKE CONCAT('%', #{searchKeyword}, '%'))
 									</if>
 								</if>
 							</if>
@@ -225,7 +225,7 @@
 							                <if test='searchTailWriter == "N"'>
 												union all
 												select a.*
-												from kcc2022_esoom.egis.TBL_FREE a 
+												from KCC_EGIS.egis.TBL_FREE a 
 												where 1=1 
 												<if test="searchChk_del != null">
 													<if test='searchChk_del != "all"'>
@@ -244,14 +244,14 @@
 	</select>
 	<select id="selectFreeDetail" resultType="com.esoom.templeate.admin.service.FreeBoardVO">
 		select *,FORMAT(wdate, 'yyyy-MM-dd HH:mm') AS formatted_date
-		,kcc2022_esoom.egis.FN_MASK_NAME(writer) writer2
-		from kcc2022_esoom.egis.TBL_FREE
+		,KCC_EGIS.egis.FN_MASK_NAME(writer) writer2
+		from KCC_EGIS.egis.TBL_FREE
 		where
 		num = #{num}
 	</select>
 	<update id="changeChkDel" parameterType="com.esoom.templeate.admin.service.FreeBoardVO">
 		update
-		kcc2022_esoom.egis.TBL_FREE
+		KCC_EGIS.egis.TBL_FREE
 		set chk_del = #{chk_del}
 		where
 		num = #{num}
@@ -262,13 +262,13 @@
 		FROM (
 		select num
 		,info_num
-		,kcc2022_esoom.egis.FN_MASK_NAME(writer) writer
+		,KCC_EGIS.egis.FN_MASK_NAME(writer) writer
 		,id
 		,writer as writer2
 		,content
 		,CONVERT(char(10),wdate ,23) wdate
 		,FORMAT(wdate , 'yyyy-MM-dd HH:mm') AS formatted_date
-		from kcc2022_esoom.egis.TBL_FREE_TAIL
+		from KCC_EGIS.egis.TBL_FREE_TAIL
 		where info_num = #{info_num}
 		) A
 		ORDER BY num 
@@ -277,29 +277,29 @@
 		select count(*)
 		from (
 		select *
-		from kcc2022_esoom.egis.TBL_FREE_TAIL
+		from KCC_EGIS.egis.TBL_FREE_TAIL
 		where info_num = #{info_num}
 		) A
 	</select>
 	<insert id="insertFreeTail" parameterType="com.esoom.templeate.admin.service.FreeTailVO">
-		insert into kcc2022_esoom.egis.TBL_FREE_TAIL values
+		insert into KCC_EGIS.egis.TBL_FREE_TAIL values
 		(
 		#{info_num},#{id},#{writer},#{content},#{ip},getdate()
 		)
 	</insert>
 	<delete id="deleteFreeTail" parameterType="com.esoom.templeate.admin.service.FreeTailVO">
 		delete from
-		kcc2022_esoom.egis.TBL_FREE_TAIL
+		KCC_EGIS.egis.TBL_FREE_TAIL
 		where num = #{num}
 	</delete>
 	<delete id="deleteFree" parameterType="com.esoom.templeate.admin.service.FreeBoardVO">
 		delete from
-		kcc2022_esoom.egis.TBL_FREE
+		KCC_EGIS.egis.TBL_FREE
 		where num = #{num}
 	</delete>
 	<update id="mergeFree" parameterType="com.esoom.templeate.admin.service.FreeBoardVO">
 		merge into
-		kcc2022_esoom.egis.TBL_FREE A
+		KCC_EGIS.egis.TBL_FREE A
 		using
 		(
 		select #{num} AS num
@@ -344,7 +344,7 @@
 		,getdate()
 		,'N'
 		,0
-		,(SELECT ISNULL(MAX(ref), 0) + 1 FROM kcc2022_esoom.egis.TBL_FREE)
+		,(SELECT ISNULL(MAX(ref), 0) + 1 FROM KCC_EGIS.egis.TBL_FREE)
 		,0
 		,0
 		,0

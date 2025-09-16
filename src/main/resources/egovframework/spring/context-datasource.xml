@@ -28,7 +28,7 @@
     -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
     <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
-    <property name="url" value="jdbc:sqlserver://123.143.147.76:1433;databaseName=kcc2022_esoom" />
+    <property name="url" value="jdbc:sqlserver://123.143.147.76:1433;databaseName=KCC_EGIS" />
     <property name="username" value="sa"/>
     <property name="password" value="esoom!@#$5678"/>
 </bean>
