@@ -32,12 +32,12 @@
         <property name="username" value="${Globals.mysql.UserName}"/>
         <property name="password" value="${Globals.mysql.Password}"/>
     </bean>
-   <!--  <bean id="dataSource-mssql" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-    <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
-    <property name="url" value="jdbc:sqlserver://123.143.147.76:1433;databaseName=KCC_EGIS" />
-    <property name="username" value="sa"/>
-    <property name="password" value="esoom!@#$5678"/>
-</bean> -->
+   <bean id="dataSource-mssql" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	    <property name="driverClassName" value="${Globals.mssql.DriverClassName}"/>
+	    <property name="url" value="${Globals.mssql.Url}" />
+	    <property name="username" value="${Globals.mssql.UserName}"/>
+	    <property name="password" value="${Globals.mssql.Password}"/>
+	</bean>
     
     <!-- oracle (POM에서 commons-dbcp, ojdbc(라이센스 사항으로 별도로 배포되지 않음) 관련 라이브러리 설정)
     <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
