@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminEtcDAO">
+
+    <select id="popupList" parameterType="com.esoom.templeate.admin.service.PopupVO" resultType="com.esoom.templeate.admin.service.PopupVO">
+        SELECT *
+        FROM (
+            SELECT num,
+                   subject,
+                   pop_img,
+                   main_chk,
+                   `order`,
+                   DATE_FORMAT(sdate, '%Y-%m-%d %H:%i') as sdate,
+                   DATE_FORMAT(edate, '%Y-%m-%d %H:%i') as edate,
+                   DATE_FORMAT(wdate, '%Y-%m-%d %H:%i') AS formatted_date
+            FROM tbl_popup
+        ) A
+        ORDER BY main_chk DESC, -`order` DESC, num DESC
+    </select>
+    
+    <select id="getPopupListCount" resultType="int">
+        SELECT COUNT(*) FROM (
+            SELECT * FROM tbl_popup
+        ) A
+    </select>
+    
+    <select id="selectPopupDetail" resultType="com.esoom.templeate.admin.service.PopupVO">
+        SELECT num,
+               subject,
+               pop_img,
+               pop_img2,
+               map_chk,
+               map_target,
+               map_url,
+               main_chk,
+               `order`,
+               DATE_FORMAT(sdate, '%Y-%m-%d') sDay,
+               DATE_FORMAT(sdate, '%H') sTime,
+               DATE_FORMAT(sdate, '%i') sMinute,
+               DATE_FORMAT(edate, '%Y-%m-%d') eDay,
+               DATE_FORMAT(edate, '%H') eTime,
+               DATE_FORMAT(edate, '%i') eMinute
+        FROM tbl_popup
+        WHERE num = #{num}
+    </select>
+    
+    <update id="mergePopup" parameterType="com.esoom.templeate.admin.service.PopupVO">
+        INSERT INTO tbl_popup (
+            num,
+            subject,
+            map_chk,
+            map_target,
+            map_url,
+            `order`,
+            main_chk,
+            sdate,
+            edate,
+            pop_img,
+            pop_img2,
+            wdate
+        )
+        VALUES (
+            #{num},
+            #{subject},
+            #{map_chk},
+            #{map_target},
+            #{map_url},
+            #{order},
+            #{main_chk},
+            #{sdate},
+            #{edate},
+            #{pop_img},
+            #{pop_img2},
+            NOW()
+        )
+        ON DUPLICATE KEY UPDATE
+            subject = #{subject},
+            map_chk = #{map_chk},
+            map_target = #{map_target},
+            map_url = #{map_url},
+            `order` = #{order},
+            main_chk = #{main_chk},
+            sdate = #{sdate},
+            edate = #{edate},
+            pop_img = #{pop_img},
+            pop_img2 = #{pop_img2}
+    </update>
+    
+    <select id="mainChkCount" resultType="int">
+        SELECT COUNT(*) FROM (
+            SELECT * FROM tbl_popup
+            WHERE main_chk = 'Y'
+            AND num != #{num}
+        ) A
+    </select>
+    
+    <delete id="deletePopup" parameterType="com.esoom.templeate.admin.service.PopupVO">
+        DELETE FROM tbl_popup
+        WHERE num = #{num}
+    </delete>
+    
+    <select id="slideList" resultType="com.esoom.templeate.admin.service.SlideVO">
+        SELECT *
+        FROM (
+            SELECT num,
+                   title,
+                   img1,
+                   use_yn,
+                   banner_order,
+                   DATE_FORMAT(reg_date, '%Y-%m-%d %H:%i') AS reg_date
+            FROM tbl_main_banner
+        ) A
+        ORDER BY use_yn DESC, -banner_order DESC, num DESC
+    </select>
+    
+    <select id="getSlideListCount" resultType="int">
+        SELECT COUNT(*)
+        FROM (
+            SELECT * FROM tbl_main_banner
+        ) A
+    </select>
+    
+    <select id="selectSlideDetail" resultType="com.esoom.templeate.admin.service.SlideVO">
+        SELECT * FROM tbl_main_banner
+        WHERE num = #{num}
+    </select>
+    
+    <update id="mergeSlide" parameterType="com.esoom.templeate.admin.service.SlideVO">
+        INSERT INTO tbl_main_banner (
+            num,
+            title,
+            links,
+            use_yn,
+            banner_order,
+            img1,
+            img2,
+            reg_date
+        )
+        VALUES (
+            #{num},
+            #{title},
+            #{links},
+            #{use_yn},
+            #{banner_order},
+            #{img1},
+            #{img2},
+            NOW()
+        )
+        ON DUPLICATE KEY UPDATE
+            title = #{title},
+            links = #{links},
+            use_yn = #{use_yn},
+            banner_order = #{banner_order},
+            img1 = #{img1},
+            img2 = #{img2}
+    </update>
+    
+    <select id="useYnCount" resultType="int">
+        SELECT COUNT(*) FROM (
+            SELECT * FROM tbl_main_banner
+            WHERE use_yn = 'Y'
+            AND num != #{num}
+        ) A
+    </select>
+    
+    <delete id="deleteSlide" parameterType="com.esoom.templeate.admin.service.SlideVO">
+        DELETE FROM tbl_main_banner
+        WHERE num = #{num}
+    </delete>
+</mapper>

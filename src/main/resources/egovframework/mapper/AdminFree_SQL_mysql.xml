@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminFreeDAO">
+
+
+    <select id="freeList" parameterType="com.esoom.templeate.admin.service.FreeBoardVO" resultType="com.esoom.templeate.admin.service.FreeBoardVO">
+    SELECT *, 
+           (@rownum:=@rownum+1) AS rownum
+    FROM (
+        SELECT A.*,
+               DATE_FORMAT(A.wdate, '%Y-%m-%d %H:%i') AS formatted_date,
+               esoom_temp.fn_mask_name(writer) writer2,
+               (SELECT COUNT(*) FROM tbl_free_tail b WHERE b.info_num = A.num) AS tail_count,
+               ROW_NUMBER() OVER (PARTITION BY A.num ORDER BY A.num) AS SEQ
+        FROM (
+            SELECT a.*
+            FROM tbl_free a 
+            WHERE 1=2 
+            AND a.chk_del = 'N'
+            
+            <if test='searchTitle =="Y"'>
+                UNION ALL
+                SELECT a.*
+                FROM tbl_free a 
+                WHERE 1=1 
+                <if test="searchChk_del != null">
+                    <if test='searchChk_del != "all"'>
+                        AND a.chk_del = #{searchChk_del}
+                    </if>
+                </if>
+                <if test="searchKeyword != null">
+                    <if test='searchKeyword != ""'>
+                        AND a.subject LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </if>
+                </if>
+            </if>
+            <if test='searchContent =="Y"'>
+                UNION ALL
+                SELECT a.*
+                FROM tbl_free a 
+                WHERE 1=1 
+                <if test="searchChk_del != null">
+                    <if test='searchChk_del != "all"'>
+                        AND a.chk_del = #{searchChk_del}
+                    </if>
+                </if>
+                <if test="searchKeyword != null">
+                    <if test='searchKeyword != ""'>
+                        AND MATCH(a.content) AGAINST (#{searchKeyword} IN BOOLEAN MODE)
+                    </if>
+                </if>
+            </if>
+            <if test='searchWriter =="Y"'>
+                UNION ALL
+                SELECT a.*
+                FROM tbl_free a 
+                WHERE 1=1 
+                <if test="searchChk_del != null">
+                    <if test='searchChk_del != "all"'>
+                        AND a.chk_del = #{searchChk_del}
+                    </if>
+                </if>
+                <if test="searchKeyword != null">
+                    <if test='searchKeyword != ""'>
+                        AND a.writer LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </if>
+                </if>
+            </if>
+            <if test='searchTail =="Y"'>
+                UNION ALL
+                SELECT a.*
+                FROM tbl_free a 
+                WHERE 1=1 
+                <if test="searchChk_del != null">
+                    <if test='searchChk_del != "all"'>
+                        AND a.chk_del = #{searchChk_del}
+                    </if>
+                </if>
+                <if test="searchKeyword != null">
+                    <if test='searchKeyword != ""'>
+                        AND a.num IN (SELECT DISTINCT info_num FROM tbl_free_tail WHERE MATCH(content) AGAINST (#{searchKeyword} IN BOOLEAN MODE))
+                    </if>
+                </if>
+            </if>
+            <if test='searchTailWriter =="Y"'>
+                UNION ALL
+                SELECT a.*
+                FROM tbl_free a 
+                WHERE 1=1 
+                <if test="searchChk_del != null">
+                    <if test='searchChk_del != "all"'>
+                        AND a.chk_del = #{chk_del}
+                    </if>
+                </if>
+                <if test="searchKeyword != null">
+                    <if test='searchKeyword != ""'>
+                        AND a.num IN (SELECT DISTINCT info_num FROM tbl_free_tail WHERE writer LIKE CONCAT('%', #{searchKeyword}, '%'))
+                    </if>
+                </if>
+            </if>
+            <if test='searchTitle == "N"'>
+                <if test='searchContent == "N"'>
+                    <if test='searchWriter == "N"'>
+                        <if test='searchTail == "N"'>
+                            <if test='searchTailWriter == "N"'>
+                                UNION ALL
+                                SELECT a.*
+                                FROM tbl_free a 
+                                WHERE 1=1 
+                                <if test="chk_del != null">
+                                    <if test='chk_del != "all"'>
+                                        AND a.chk_del = #{searchChk_del}
+                                    </if>
+                                </if>
+                            </if>
+                        </if>
+                    </if>
+                </if>
+            </if>
+        ) A
+    ) A 
+    CROSS JOIN (SELECT @rownum:=0) r
+    WHERE A.SEQ = 1
+    ORDER BY ref DESC, ansnum, step
+</select>
+	<select id="getFreeListCount" resultType="int">
+    SELECT COUNT(*) FROM (
+        SELECT A.num
+        FROM (
+            SELECT a.num
+            FROM tbl_free a 
+            WHERE 1=2 
+            AND a.chk_del = 'N'
+            
+            <if test='searchTitle =="Y"'>
+                UNION ALL
+                SELECT a.num
+                FROM tbl_free a 
+                WHERE 1=1 
+                <if test="searchChk_del != null">
+                    <if test='searchChk_del != "all"'>
+                        AND a.chk_del = #{searchChk_del}
+                    </if>
+                </if>
+                <if test="searchKeyword != null">
+                    <if test='searchKeyword != ""'>
+                        AND a.subject LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </if>
+                </if>
+            </if>
+            <if test='searchContent =="Y"'>
+                UNION ALL
+                SELECT a.num
+                FROM tbl_free a 
+                WHERE 1=1 
+                <if test="searchChk_del != null">
+                    <if test='searchChk_del != "all"'>
+                        AND a.chk_del = #{searchChk_del}
+                    </if>
+                </if>
+                <if test="searchKeyword != null">
+                    <if test='searchKeyword != ""'>
+                        AND MATCH(a.content) AGAINST (#{searchKeyword} IN BOOLEAN MODE)
+                    </if>
+                </if>
+            </if>
+            <if test='searchWriter =="Y"'>
+                UNION ALL
+                SELECT a.num
+                FROM tbl_free a 
+                WHERE 1=1 
+                <if test="searchChk_del != null">
+                    <if test='searchChk_del != "all"'>
+                        AND a.chk_del = #{searchChk_del}
+                    </if>
+                </if>
+                <if test="searchKeyword != null">
+                    <if test='searchKeyword != ""'>
+                        AND a.writer LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </if>
+                </if>
+            </if>
+            <if test='searchTail =="Y"'>
+                UNION ALL
+                SELECT a.num
+                FROM tbl_free a 
+                WHERE 1=1 
+                <if test="searchChk_del != null">
+                    <if test='searchChk_del != "all"'>
+                        AND a.chk_del = #{searchChk_del}
+                    </if>
+                </if>
+                <if test="searchKeyword != null">
+                    <if test='searchKeyword != ""'>
+                        AND a.num IN (SELECT DISTINCT info_num FROM tbl_free_tail WHERE MATCH(content) AGAINST (#{searchKeyword} IN BOOLEAN MODE))
+                    </if>
+                </if>
+            </if>
+            <if test='searchTailWriter =="Y"'>
+                UNION ALL
+                SELECT a.num
+                FROM tbl_free a 
+                WHERE 1=1 
+                <if test="searchChk_del != null">
+                    <if test='searchChk_del != "all"'>
+                        AND a.chk_del = #{searchChk_del}
+                    </if>
+                </if>
+                <if test="searchKeyword != null">
+                    <if test='searchKeyword != ""'>
+                        AND a.num IN (SELECT DISTINCT info_num FROM tbl_free_tail WHERE writer LIKE CONCAT('%', #{searchKeyword}, '%'))
+                    </if>
+                </if>
+            </if>
+            <if test='searchTitle == "N"'>
+                <if test='searchContent == "N"'>
+                    <if test='searchWriter == "N"'>
+                        <if test='searchTail == "N"'>
+                            <if test='searchTailWriter == "N"'>
+                                UNION ALL
+                                SELECT a.num
+                                FROM tbl_free a 
+                                WHERE 1=1 
+                                <if test="searchChk_del != null">
+                                    <if test='searchChk_del != "all"'>
+                                        AND a.chk_del = #{searchChk_del}
+                                    </if>
+                                </if>
+                            </if>
+                        </if>
+                    </if>
+                </if>
+            </if>
+        ) AS A
+    ) AS B
+</select>
+<select id="selectFreeDetail" resultType="com.esoom.templeate.admin.service.FreeBoardVO">
+    SELECT *,
+           DATE_FORMAT(wdate, '%Y-%m-%d %H:%i') AS formatted_date,
+           esoom_temp.fn_mask_name(writer) writer2
+    FROM tbl_free
+    WHERE num = #{num}
+</select>
+<update id="changeChkDel" parameterType="com.esoom.templeate.admin.service.FreeBoardVO">
+    UPDATE tbl_free
+    SET chk_del = #{chk_del}
+    WHERE num = #{num}
+</update>
+<select id="freeTailList" resultType="com.esoom.templeate.admin.service.FreeTailVO">
+    SELECT *
+    FROM (
+        SELECT num,
+               info_num,
+               esoom_temp.fn_mask_name(writer) writer,
+               id,
+               writer as writer2,
+               content,
+               DATE_FORMAT(wdate, '%Y-%m-%d') wdate,
+               DATE_FORMAT(wdate, '%Y-%m-%d %H:%i') AS formatted_date
+        FROM tbl_free_tail
+        WHERE info_num = #{info_num}
+    ) A
+    ORDER BY num 
+</select>
+
+<select id="getFreeTailListCount" resultType="int">
+    SELECT COUNT(*)
+    FROM tbl_free_tail
+    WHERE info_num = #{info_num}
+</select>
+
+<insert id="insertFreeTail" parameterType="com.esoom.templeate.admin.service.FreeTailVO">
+    INSERT INTO tbl_free_tail VALUES
+    (
+        #{info_num}, #{id}, #{writer}, #{content}, #{ip}, NOW()
+    )
+</insert>
+
+<delete id="deleteFreeTail" parameterType="com.esoom.templeate.admin.service.FreeTailVO">
+    DELETE FROM tbl_free_tail
+    WHERE num = #{num}
+</delete>
+
+<delete id="deleteFree" parameterType="com.esoom.templeate.admin.service.FreeBoardVO">
+    DELETE FROM tbl_free
+    WHERE num = #{num}
+</delete>
+
+<update id="mergeFree" parameterType="com.esoom.templeate.admin.service.FreeBoardVO">
+    INSERT INTO tbl_free (
+        num,
+        subject,
+        content,
+        flag,
+        id,
+        writer,
+        ip,
+        wdate,
+        chk_del,
+        visited,
+        ref,
+        step,
+        ansnum,
+        tn,
+        pn,
+        recommend
+    )
+    VALUES (
+        #{num},
+        #{subject},
+        #{content},
+        #{flag},
+        #{id},
+        #{writer},
+        #{ip},
+        NOW(),
+        'N',
+        0,
+        (SELECT IFNULL(MAX(ref), 0) + 1 FROM tbl_free),
+        0,
+        0,
+        0,
+        0,
+        0
+    )
+    ON DUPLICATE KEY UPDATE
+        subject = #{subject},
+        content = #{content},
+        flag = #{flag}
+</update>
+</mapper>

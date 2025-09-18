@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminMemberDAO">
+
+
+    <select id="memberList" parameterType="com.esoom.templeate.admin.service.MemberVO" resultType="com.esoom.templeate.admin.service.MemberVO">
+    SELECT *
+    FROM (
+        SELECT num,
+               (@rownum:=@rownum+1) AS rownum,
+               id,
+               esoom_temp.fn_mask_name(name) name,
+               DATE_FORMAT(reg_date, '%Y-%m-%d %H:%i') reg_date,
+               DATE_FORMAT(logindate, '%Y-%m-%d %H:%i') logindate,
+               chk_state
+        FROM tbl_member
+        CROSS JOIN (SELECT @rownum:=0) r
+        WHERE 1=1
+        <if test="chk_state != null">
+            <if test='chk_state != "all"'>
+                AND chk_state = #{chk_state}
+            </if>
+        </if>
+        <if test="searchKeyword != null">
+            <if test='searchKeyword != ""'>
+                <if test="select != null">
+                    <if test='select == "memberName"'>
+                        AND name LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </if>
+                    <if test='select == "memberId"'>
+                        AND id LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </if>
+                </if>
+            </if>
+        </if>
+    ) A
+    ORDER BY num DESC
+</select>
+
+<select id="getMemberListCount" resultType="int">
+    SELECT COUNT(*) 
+    FROM tbl_member
+    WHERE 1=1
+    <if test="chk_state != null">
+        <if test='chk_state != "all"'>
+            AND chk_state = #{chk_state}
+        </if>
+    </if>
+    <if test="searchKeyword != null">
+        <if test='searchKeyword != ""'>
+            <if test="select != null">
+                <if test='select == "memberName"'>
+                    AND name LIKE CONCAT('%', #{searchKeyword}, '%')
+                </if>
+                <if test='select == "memberId"'>
+                    AND id LIKE CONCAT('%', #{searchKeyword}, '%')
+                </if>
+            </if>
+        </if>
+    </if>
+</select>
+
+<select id="selectMemberDetail" resultType="com.esoom.templeate.admin.service.MemberVO">
+    SELECT *,
+           DATE_FORMAT(reg_date, '%Y-%m-%d %H:%i') reg_date,
+           DATE_FORMAT(logindate, '%Y-%m-%d %H:%i') logindate
+    FROM tbl_member
+    WHERE 1=1
+    <if test="num != null">
+        <if test='num != 0'>
+            AND num = #{num}
+        </if>
+    </if>
+    <if test="id != null">
+        <if test='id != ""'>
+            AND id = #{id}
+        </if>
+    </if>
+</select>
+
+<update id="changePwd" parameterType="com.esoom.templeate.admin.service.MemberVO">
+    UPDATE tbl_member
+    SET sha_pwd = #{sha_pwd}
+    WHERE num = #{num}
+</update>
+
+<update id="updateState" parameterType="com.esoom.templeate.admin.service.MemberVO">
+    UPDATE tbl_member
+    SET chk_state = #{chk_state}
+    WHERE num = #{num}
+</update>
+</mapper>

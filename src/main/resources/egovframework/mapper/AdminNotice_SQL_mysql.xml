@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminNoticeDAO">
+
+
+<select id="noticeList" parameterType="com.esoom.templeate.admin.service.BoardVO" resultType="com.esoom.templeate.admin.service.BoardVO">
+    SELECT 
+        t.*,
+        (@rownum:=@rownum+1) AS rownum,
+        DATE_FORMAT(wdate, '%Y-%m-%d %H:%i') AS formatted_date
+    FROM tbl_news t
+    CROSS JOIN (SELECT @rownum:=0) r
+    WHERE 1=1
+    AND part = 'notice'
+    <if test="searchKeyword != null">
+        <if test='searchKeyword != ""'>
+            AND subject LIKE CONCAT('%', #{searchKeyword}, '%')
+        </if>
+    </if>
+    <if test="flag != null">
+        AND flag = #{flag}
+    </if>
+    ORDER BY num DESC
+</select>
+
+<select id="getTotalNoticeListCount" resultType="int">
+    SELECT COUNT(*)
+    FROM tbl_news
+    WHERE 1=1
+    AND part = #{part}
+</select>
+
+<select id="getNoticeListCount" resultType="int">
+    SELECT COUNT(*) 
+    FROM tbl_news
+    WHERE 1=1
+    AND part = 'notice'
+    <if test="searchKeyword != null">
+        <if test='searchKeyword != ""'>
+            AND subject LIKE CONCAT('%', #{searchKeyword}, '%')
+        </if>
+    </if>
+    <if test="flag != null">
+        AND flag = #{flag}
+    </if>
+</select>
+
+<select id="selectBoardDetail" resultType="com.esoom.templeate.admin.service.BoardVO">
+    SELECT 
+        t.*,
+        DATE_FORMAT(sdate, '%Y-%m-%d') AS sDay,
+        DATE_FORMAT(sdate, '%H') AS sTime,
+        DATE_FORMAT(sdate, '%i') AS sMinute,
+        DATE_FORMAT(edate, '%Y-%m-%d') AS eDay,
+        DATE_FORMAT(edate, '%H') AS eTime,
+        DATE_FORMAT(edate, '%i') AS eMinute,
+        DATE_FORMAT(wdate, '%Y-%m-%d %H:%i') AS formatted_date
+    FROM tbl_news t
+    WHERE num = #{num}
+</select>
+
+<select id="lastBoard" resultType="com.esoom.templeate.admin.service.BoardVO">
+    SELECT * FROM tbl_news 
+    ORDER BY num DESC 
+    LIMIT 1
+</select>
+
+<update id="mergeBoard" parameterType="com.esoom.templeate.admin.service.BoardVO">
+    INSERT INTO tbl_news (
+        num,
+        subject,
+        content,
+        summary,
+        visited,
+        flag,
+        part,
+        wtype,
+        linkurl,
+        etc1,
+        etc2,
+        sdate,
+        edate,
+        img1,
+        img2,
+        wdate
+    )
+    VALUES (
+        #{num},
+        #{subject},
+        #{content},
+        #{summary},
+        #{visited},
+        #{flag},
+        #{part},
+        #{wtype},
+        #{linkurl},
+        #{etc1},
+        #{etc2},
+        #{sdate},
+        #{edate},
+        #{img1},
+        #{img2},
+        NOW()
+    )
+    ON DUPLICATE KEY UPDATE
+        subject = #{subject},
+        content = #{content},
+        summary = #{summary},
+        visited = #{visited},
+        flag = #{flag},
+        part = #{part},
+        wtype = #{wtype},
+        linkurl = #{linkurl},
+        etc1 = #{etc1},
+        etc2 = #{etc2},
+        sdate = #{sdate},
+        edate = #{edate},
+        img1 = #{img1},
+        img2 = #{img2}
+</update>
+
+<delete id="deleteBoard" parameterType="com.esoom.templeate.admin.service.BoardVO">
+    DELETE FROM tbl_news
+    WHERE num = #{num}
+</delete>
+</mapper>

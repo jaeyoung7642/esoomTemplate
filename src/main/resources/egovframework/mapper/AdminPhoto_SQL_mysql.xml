@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AdminPhotoDAO">
+
+
+ <select id="photoList" parameterType="com.esoom.templeate.admin.service.BoardVO" resultType="com.esoom.templeate.admin.service.BoardVO">
+    SELECT *
+    FROM (
+        SELECT a.*,
+               (@rownum:=@rownum+1) AS rownum,
+               DATE_FORMAT(wdate, '%Y-%m-%d') AS formatted_date 
+        FROM tbl_news a
+        CROSS JOIN (SELECT @rownum:=0) r
+        WHERE 1=1
+        AND a.part = 'photo'
+        <if test="searchKeyword != null">
+            <if test='searchKeyword != ""'>
+                AND (a.subject LIKE CONCAT('%', #{searchKeyword}, '%') OR a.keyword_tag LIKE CONCAT('%', #{searchKeyword}, '%'))
+            </if>
+        </if>
+        <if test="sdate != null and edate !=null">
+            <if test='sdate != "" and edate !=""'>
+                AND DATE_FORMAT(a.wdate, '%Y-%m-%d') BETWEEN #{sdate} AND #{edate}
+            </if>
+        </if>
+    ) A
+    ORDER BY num DESC
+</select>
+
+<select id="getTotalPhotoListCount" resultType="int">
+    SELECT COUNT(*)
+    FROM tbl_news
+    WHERE 1=1
+    AND part = #{part}
+</select>
+
+<select id="getPhotoListCount" resultType="int">
+    SELECT COUNT(*) 
+    FROM tbl_news a
+    WHERE 1=1
+    AND a.part = 'photo'
+    <if test="searchKeyword != null">
+        <if test='searchKeyword != ""'>
+            AND (a.subject LIKE CONCAT('%', #{searchKeyword}, '%') OR a.keyword_tag LIKE CONCAT('%', #{searchKeyword}, '%'))
+        </if>
+    </if>
+    <if test="sdate != null and edate !=null">
+        <if test='sdate != "" and edate !=""'>
+            AND DATE_FORMAT(a.wdate, '%Y-%m-%d') BETWEEN #{sdate} AND #{edate}
+        </if>
+    </if>
+</select>
+
+<select id="boardPhotoList" resultType="com.esoom.templeate.admin.service.BoardPhotoVO">
+    SELECT * FROM tbl_news_photo
+    WHERE 1=1
+    AND info_num = #{num}
+    ORDER BY num
+</select>
+
+<update id="boardPhotoMerge" parameterType="com.esoom.templeate.admin.service.BoardPhotoVO">
+    INSERT INTO tbl_news_photo (
+        num,
+        photofile,
+        info_num,
+        wdate
+    )
+    VALUES (
+        #{num},
+        #{photofile},
+        #{info_num},
+        NOW()
+    )
+    ON DUPLICATE KEY UPDATE
+        photofile = #{photofile}
+</update>
+
+<delete id="deleteBoardPhoto" parameterType="com.esoom.templeate.admin.service.BoardPhotoVO">
+    DELETE FROM tbl_news_photo
+    WHERE num = #{num}
+</delete>
+</mapper>
