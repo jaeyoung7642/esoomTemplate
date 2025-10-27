@@ -58,13 +58,14 @@ public class AdminPhotoController {
 	@GetMapping("/mPhotoWrite.do")
 	public String mPhotoWrite(ModelMap model,
 			@ModelAttribute("BoardVO") BoardVO BoardVO) throws Exception {
-		BoardVO = adminNoticeService.selectBoardDetail(BoardVO);
-		System.out.println(BoardVO.getPart());
-		List<BoardPhotoVO> photoList = (List<BoardPhotoVO>) adminPhotoService.boardPhotoList(BoardVO); 
-		if(photoList.size()>0) {
-			BoardVO.setPhotoList(photoList);
+		if(BoardVO.getNum() != 0) {
+			BoardVO = adminNoticeService.selectBoardDetail(BoardVO);
+			List<BoardPhotoVO> photoList = (List<BoardPhotoVO>) adminPhotoService.boardPhotoList(BoardVO); 
+			if(photoList.size()>0) {
+				BoardVO.setPhotoList(photoList);
+			}
+			model.addAttribute("result", BoardVO);
 		}
-		model.addAttribute("result", BoardVO);
 		return "admin/board/mPhotoWrite";
 	}
 	@RequestMapping("/mergeBoardPhoto.do")

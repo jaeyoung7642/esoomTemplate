@@ -295,7 +295,7 @@
 				if (confirm("정말 삭제하시겠습니까?") == true) {
 			        	$.ajax({
 					   	 type : "GET",            // HTTP method type(GET, POST) 형식이다.
-					        url : "/esoomTemplate/deleteBoardPhoto.do",      // 컨트롤러에서 대기중인 URL 주소이다.
+					        url : "/cmsAdm/deleteBoardPhoto.do",      // 컨트롤러에서 대기중인 URL 주소이다.
 					        data : {
 					       	 "num":photoNum
 					        },            // Json 형식의 데이터이다.

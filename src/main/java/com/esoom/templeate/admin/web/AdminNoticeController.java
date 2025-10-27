@@ -121,7 +121,7 @@ public class AdminNoticeController {
 	    } else {
 	        boardVO.setImg2(img2_bf);
 	    }
-
+	    System.out.println("content>>>>>>>>>>>>>>>>>>>>>>>>>>>"+boardVO.getContent());
 	    int result = adminNoticeService.mergeBoard(boardVO);
 
 	    String returnUrl = "";

@@ -34,7 +34,7 @@ function showYn(num,chkDel){
 	if (confirm("노출여부를 변경하시겠습니까?") == true) {
 		$.ajax({
 	   	 type : "GET",            // HTTP method type(GET, POST) 형식이다.
-	        url : "/esoomTemplate/changeChkDel.do",      // 컨트롤러에서 대기중인 URL 주소이다.
+	        url : "/cmsAdm/changeChkDel.do",      // 컨트롤러에서 대기중인 URL 주소이다.
 	        data : {
 	       	 "num":num,
 	       	 "chk_del" : chkDel
@@ -394,7 +394,7 @@ function searchval(){
 			var writerId = $(this).prev().val();
 			$.ajax({
 			   	 type : "POST",            // HTTP method type(GET, POST) 형식이다.
-			        url : "/esoomTemplate/writerData.do",      // 컨트롤러에서 대기중인 URL 주소이다.
+			        url : "/cmsAdm/writerData.do",      // 컨트롤러에서 대기중인 URL 주소이다.
 			        data : {
 			       	 "id": writerId
 			        },            // Json 형식의 데이터이다.
@@ -420,7 +420,7 @@ function searchval(){
 			var num = $(this).prev().val();
 			$.ajax({
 			   	 type : "POST",            // HTTP method type(GET, POST) 형식이다.
-			        url : "/esoomTemplate/detailData.do",      // 컨트롤러에서 대기중인 URL 주소이다.
+			        url : "/cmsAdm/detailData.do",      // 컨트롤러에서 대기중인 URL 주소이다.
 			        data : {
 			       	 "num": num
 			        },            // Json 형식의 데이터이다.

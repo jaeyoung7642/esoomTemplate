@@ -17,14 +17,14 @@
 		<url-pattern>*.do</url-pattern>
 	</filter-mapping>
     
-	<filter>
+	<!-- <filter>
 		<filter-name>HTMLTagFilter</filter-name>
 		<filter-class>org.egovframe.rte.ptl.mvc.filter.HTMLTagFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>HTMLTagFilter</filter-name>
 		<url-pattern>*.do</url-pattern>
-	</filter-mapping>
+	</filter-mapping> -->
     
 	<context-param>
 		<param-name>contextConfigLocation</param-name>

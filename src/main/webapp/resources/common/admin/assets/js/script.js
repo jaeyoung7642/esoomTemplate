@@ -101,7 +101,7 @@ function onInputDateHandler(a) {
 		}
         	$.ajax({
 		   	 type : "GET",            // HTTP method type(GET, POST) 형식이다.
-		        url :"/esoomTemplate/deleteBoard.do",      // 컨트롤러에서 대기중인 URL 주소이다.
+		        url :"/cmsAdm/deleteBoard.do",      // 컨트롤러에서 대기중인 URL 주소이다.
 		        data : {
 		       	 "num":num
 		        },            // Json 형식의 데이터이다.
@@ -168,7 +168,7 @@ function onInputDateHandler(a) {
 		}
         	$.ajax({
 		   	 type : "GET",            // HTTP method type(GET, POST) 형식이다.
-		        url : "/esoomTemplate/deletePopup.do",      // 컨트롤러에서 대기중인 URL 주소이다.
+		        url : "/cmsAdm/deletePopup.do",      // 컨트롤러에서 대기중인 URL 주소이다.
 		        data : {
 		       	 "num":num
 		        },            // Json 형식의 데이터이다.
@@ -193,7 +193,7 @@ function onInputDateHandler(a) {
 	if (confirm("정말 삭제하시겠습니까?") == true) {
         	$.ajax({
 		   	 type : "GET",            // HTTP method type(GET, POST) 형식이다.
-		        url : "/esoomTemplate/deleteSlide.do",      // 컨트롤러에서 대기중인 URL 주소이다.
+		        url : "/cmsAdm/deleteSlide.do",      // 컨트롤러에서 대기중인 URL 주소이다.
 		        data : {
 		       	 "num":num
 		        },            // Json 형식의 데이터이다.
@@ -267,7 +267,7 @@ function onInputDateHandler(a) {
 			if (confirm("정말 복구 하시겠습니까?") == true) {
 	        	$.ajax({
 			   	 type : "GET",            // HTTP method type(GET, POST) 형식이다.
-			        url : "/esoomTemplate/updateState.do",      // 컨트롤러에서 대기중인 URL 주소이다.
+			        url : "/cmsAdm/updateState.do",      // 컨트롤러에서 대기중인 URL 주소이다.
 			        data : {
 			       	 "num":num,
 			       	 "chk_state" : str
@@ -292,7 +292,7 @@ function onInputDateHandler(a) {
 			if (confirm("정말 탈퇴처리 하시겠습니까?") == true) {
 		        	$.ajax({
 				   	 type : "GET",            // HTTP method type(GET, POST) 형식이다.
-				        url : "/esoomTemplate/updateState.do",      // 컨트롤러에서 대기중인 URL 주소이다.
+				        url : "/cmsAdm/updateState.do",      // 컨트롤러에서 대기중인 URL 주소이다.
 				        data : {
 				       	 "num":num,
 				       	 "chk_state" : str

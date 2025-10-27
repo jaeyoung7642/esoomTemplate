@@ -135,7 +135,7 @@
 									<th scope="row">내용</th>
 									<td>
 										<!-- 편집기 영역 -->
-										<textarea name="content" id="ckeditor" cols="30" rows="10" class="frm_input">${result.content }</textarea>
+										<textarea name="content" id="ckeditor" cols="30" rows="10" class="frm_input"><c:out value="${result.content}" escapeXml="false" /></textarea> 
 									</td>
 								</tr>
 							</tbody>
@@ -169,6 +169,8 @@
 			    { name: 'Styles', items: [ 'Font', 'FontSize' ] },
 			    { name: 'Links', items: [ 'Link'] },
 			],
+			entities: false,
+			basicEntities: false,
 			font_names: '맑은 고딕/Malgun Gothic;' +
             '돋움/Dotum;' +
             '굴림/Gulim;' +
@@ -177,7 +179,7 @@
             'HY견고딕/HY견고딕;' +
             'HY견명조/HY견명조'
 		});
-	});
+	}); 
     </script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
 		  <script src="https://www.googletagmanager.com/gtag/js?id=UA-180137319-1"></script>

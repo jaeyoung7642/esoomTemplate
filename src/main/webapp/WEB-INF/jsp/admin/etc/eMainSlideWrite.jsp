@@ -42,7 +42,7 @@
 	 	if(useYn=='Y'){
 			$.ajax({
 			   	 type : "GET",            // HTTP method type(GET, POST) 형식이다.
-			        url : "/esoomTemplate/useYnCount.do",      // 컨트롤러에서 대기중인 URL 주소이다.
+			        url : "/cmsAdm/useYnCount.do",      // 컨트롤러에서 대기중인 URL 주소이다.
 			        data : {
 			        	"num":num
 			        },            // Json 형식의 데이터이다.

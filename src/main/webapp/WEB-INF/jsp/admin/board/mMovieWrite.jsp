@@ -80,7 +80,7 @@
 					<ul class="snb_list">
 						<li><a href="mNewsList.do" class="snb_link">뉴스</a></li> <!-- 현재 페이지 메뉴 current -->
 						<li><a href="mMovieList.do" class="snb_link current">영상</a></li>
-						<li><a href="mPhotoList" class="snb_link">사진</a></li>
+						<li><a href="mPhotoList.do" class="snb_link">사진</a></li>
 					</ul>
 				</nav>
 			</aside>

@@ -41,7 +41,7 @@
 	 	if(mainChk=='Y'){
 			$.ajax({
 			   	 type : "GET",            // HTTP method type(GET, POST) 형식이다.
-			        url : "/esoomTemplate/mainChkCount.do",      // 컨트롤러에서 대기중인 URL 주소이다.
+			        url : "/cmsAdm/mainChkCount.do",      // 컨트롤러에서 대기중인 URL 주소이다.
 			        data : {
 			        	"num":num
 			        },            // Json 형식의 데이터이다.
