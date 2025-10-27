@@ -33,6 +33,7 @@ import com.esoom.templeate.common.Pagination;
 import com.esoom.templeate.common.service.CommonService;
 
 @Controller
+@RequestMapping("/cmsAdm")
 public class AdminLoginController {
 	@Resource(name = "commonService")
 	private CommonService commonService;
@@ -58,7 +59,7 @@ public class AdminLoginController {
 	@GetMapping(value = "/adminLogout.do")
 	public String logout(HttpSession session) {
 		session.invalidate();
-		return "redirect:/adminLoginForm.do";
+		return "redirect:/cmsAdm/adminLoginForm.do";
 	}
 	@RequestMapping(value = "/adminLogin.do", method = RequestMethod.POST)
 	public String adminLogin(HttpSession session, @RequestParam(value = "id") String id,
@@ -89,12 +90,12 @@ public class AdminLoginController {
 				if("70".equals(userInfo.getChk_grade())) {
 					session.setMaxInactiveInterval(30 * 60);
 					session.setAttribute("user", userInfo);
-					returnUrl = "redirect:/fFreeList.do";
+					returnUrl = "redirect:/cmsAdm/fFreeList.do";
 				}else {
 					System.out.println("2");
 					session.setMaxInactiveInterval(30 * 60);
 					session.setAttribute("user", userInfo);
-					returnUrl = "redirect:/mNewsList.do";
+					returnUrl = "redirect:/cmsAdm/mNewsList.do";
 				}
 			} else {// 비밀번호가 틀렸을 경우
 				System.out.println("3");

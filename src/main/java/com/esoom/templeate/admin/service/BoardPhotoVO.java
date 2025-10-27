@@ -25,6 +25,17 @@ public class BoardPhotoVO extends BoardVO implements Serializable {
 	private String photofile = "";
 	
 	private Integer info_num = 0;
+	
+	private Integer photo_count = 0;
+	
+	
+	public Integer getPhoto_count() {
+		return photo_count;
+	}
+
+	public void setPhoto_count(Integer photo_count) {
+		this.photo_count = photo_count;
+	}
 
 	public String getPhotofile() {
 		return photofile;

@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="FreeDAO">
+    <select id="freeList" parameterType="com.esoom.templeate.admin.service.FreeBoardVO" resultType="com.esoom.templeate.admin.service.FreeBoardVO">
+		SELECT * , ROW_NUMBER() OVER (ORDER BY A.ref, A.ansnum desc,A.step desc) AS rownum
+			FROM (	
+					select A.*
+					, FORMAT(A.wdate, 'yyyy-MM-dd') AS formatted_date
+					, KCC_EGIS.egis.FN_MASK_NAME(writer) writer2
+					, (SELECT COUNT(*) FROM KCC_EGIS.egis.TBL_FREE_TAIL b WHERE b.info_num = A.num) AS tail_count
+					, ROW_NUMBER() OVER (PARTITION BY A.num ORDER BY A.num) AS SEQ
+					from (
+							select a.*
+							from KCC_EGIS.egis.TBL_FREE a 
+							where 1=2 
+							and a.chk_del = 'N'
+							
+							<if test='searchTitle =="Y"'>
+								union all
+								select a.*
+								from KCC_EGIS.egis.TBL_FREE a 
+								where 1=1 
+								<if test="searchChk_del != null">
+									<if test='searchChk_del != "all"'>
+										and a.chk_del = #{searchChk_del}
+									</if>
+								</if>
+								<if test="searchKeyword != null">
+									<if test='searchKeyword != ""'>
+								      	and a.subject LIKE CONCAT('%', #{searchKeyword}, '%')
+									</if>
+								</if>
+							</if>
+							<if test='searchContent =="Y"'>
+								union all
+								select a.*
+								from KCC_EGIS.egis.TBL_FREE a 
+								where 1=1 
+								<if test="searchChk_del != null">
+									<if test='searchChk_del != "all"'>
+										and a.chk_del = #{searchChk_del}
+									</if>
+								</if>
+								<if test="searchKeyword != null">
+									<if test='searchKeyword != ""'>
+								      	and CONTAINS(a.content, #{searchKeyword})
+									</if>
+								</if>
+							</if>
+							<if test='searchWriter =="Y"'>
+								union all
+								select a.*
+								from KCC_EGIS.egis.TBL_FREE a 
+								where 1=1 
+								<if test="searchChk_del != null">
+									<if test='searchChk_del != "all"'>
+										and a.chk_del = #{searchChk_del}
+									</if>
+								</if>
+								<if test="searchKeyword != null">
+									<if test='searchKeyword != ""'>
+								      	and a.writer LIKE CONCAT('%', #{searchKeyword}, '%')
+									</if>
+								</if>
+							</if>
+							<if test='searchTail =="Y"'>
+								union all
+								select a.*
+								from KCC_EGIS.egis.TBL_FREE a 
+								where 1=1 
+								<if test="searchChk_del != null">
+									<if test='searchChk_del != "all"'>
+										and a.chk_del = #{searchChk_del}
+									</if>
+								</if>
+								<if test="searchKeyword != null">
+									<if test='searchKeyword != ""'>
+										and a.num in (select distinct info_num FROM KCC_EGIS.egis.TBL_FREE_TAIL where CONTAINS(content, #{searchKeyword}))
+									</if>
+								</if>
+							</if>
+							<if test='searchTailWriter =="Y"'>
+								union all
+								select a.*
+								from KCC_EGIS.egis.TBL_FREE a 
+								where 1=1 
+								<if test="searchChk_del != null">
+									<if test='searchChk_del != "all"'>
+										and a.chk_del = #{chk_del}
+									</if>
+								</if>
+								<if test="searchKeyword != null">
+									<if test='searchKeyword != ""'>
+										and a.num in (select distinct info_num FROM KCC_EGIS.egis.TBL_FREE_TAIL where writer LIKE CONCAT('%', #{searchKeyword}, '%'))
+									</if>
+								</if>
+							</if>
+							<if test='searchTitle == "N"'>
+							    <if test='searchContent == "N"'>
+							        <if test='searchWriter == "N"'>
+							            <if test='searchTail == "N"'>
+							                <if test='searchTailWriter == "N"'>
+												union all
+												select a.*
+												from KCC_EGIS.egis.TBL_FREE a 
+												where 1=1 
+												<if test="chk_del != null">
+													<if test='chk_del != "all"'>
+														and a.chk_del = #{searchChk_del}
+													</if>
+												</if>
+											</if>
+										</if>
+									</if>
+								</if>
+							</if>
+						) A
+					) A 
+			WHERE A.SEQ = 1
+			ORDER BY ref desc, ansnum,step
+	</select>
+	<select id="getFreeListCount" resultType="int">
+		select count(*) from (
+		SELECT * 
+			FROM (	
+					select A.*
+					, FORMAT(a.wdate, 'yyyy.MM.dd') AS reg_date
+					, KCC_EGIS.egis.FN_MASK_NAME(writer) writer2
+					, ROW_NUMBER() OVER (ORDER BY a.num) AS rownum
+					, (SELECT COUNT(*) FROM KCC_EGIS.egis.TBL_FREE_TAIL b WHERE b.info_num = a.num) AS tail_count
+					, ROW_NUMBER() OVER (PARTITION BY A.num ORDER BY A.num) AS SEQ
+					from (
+							select a.*
+							from KCC_EGIS.egis.TBL_FREE a 
+							where 1=2 
+							and a.chk_del = 'N'
+							
+							<if test='searchTitle =="Y"'>
+								union all
+								select a.*
+								from KCC_EGIS.egis.TBL_FREE a 
+								where 1=1 
+								<if test="searchChk_del != null">
+									<if test='searchChk_del != "all"'>
+										and a.chk_del = #{searchChk_del}
+									</if>
+								</if>
+								<if test="searchKeyword != null">
+									<if test='searchKeyword != ""'>
+								      	and a.subject LIKE CONCAT('%', #{searchKeyword}, '%')
+									</if>
+								</if>
+							</if>
+							<if test='searchContent =="Y"'>
+								union all
+								select a.*
+								from KCC_EGIS.egis.TBL_FREE a 
+								where 1=1 
+								<if test="searchChk_del != null">
+									<if test='searchChk_del != "all"'>
+										and a.chk_del = #{chk_del}
+									</if>
+								</if>
+								<if test="searchKeyword != null">
+									<if test='searchKeyword != ""'>
+								      	and CONTAINS(a.content, #{searchKeyword})
+									</if>
+								</if>
+							</if>
+							<if test='searchWriter =="Y"'>
+								union all
+								select a.*
+								from KCC_EGIS.egis.TBL_FREE a 
+								where 1=1 
+								<if test="searchChk_del != null">
+									<if test='searchChk_del != "all"'>
+										and a.chk_del = #{searchChk_del}
+									</if>
+								</if>
+								<if test="searchKeyword != null">
+									<if test='searchKeyword != ""'>
+								      	and a.writer LIKE CONCAT('%', #{searchKeyword}, '%')
+									</if>
+								</if>
+							</if>
+							<if test='searchTail =="Y"'>
+								union all
+								select a.*
+								from KCC_EGIS.egis.TBL_FREE a 
+								where 1=1 
+								<if test="searchChk_del != null">
+									<if test='searchChk_del != "all"'>
+										and a.chk_del = #{searchChk_del}
+									</if>
+								</if>
+								<if test="searchKeyword != null">
+									<if test='searchKeyword != ""'>
+										and a.num in (select distinct info_num FROM KCC_EGIS.egis.TBL_FREE_TAIL where CONTAINS(content, #{searchKeyword}))
+									</if>
+								</if>
+							</if>
+							<if test='searchTailWriter =="Y"'>
+								union all
+								select a.*
+								from KCC_EGIS.egis.TBL_FREE a 
+								where 1=1 
+								<if test="searchChk_del != null">
+									<if test='searchChk_del != "all"'>
+										and a.chk_del = #{searchChk_del}
+									</if>
+								</if>
+								<if test="searchKeyword != null">
+									<if test='searchKeyword != ""'>
+										and a.num in (select distinct info_num FROM KCC_EGIS.egis.TBL_FREE_TAIL where writer LIKE CONCAT('%', #{searchKeyword}, '%'))
+									</if>
+								</if>
+							</if>
+							<if test='searchTitle == "N"'>
+							    <if test='searchContent == "N"'>
+							        <if test='searchWriter == "N"'>
+							            <if test='searchTail == "N"'>
+							                <if test='searchTailWriter == "N"'>
+												union all
+												select a.*
+												from KCC_EGIS.egis.TBL_FREE a 
+												where 1=1 
+												<if test="searchChk_del != null">
+													<if test='searchChk_del != "all"'>
+														and a.chk_del = #{searchChk_del}
+													</if>
+												</if>
+											</if>
+										</if>
+									</if>
+								</if>
+							</if>
+						) A
+					) A 
+			WHERE A.SEQ = 1
+		) A
+	</select>
+	<select id="topFreeList" resultType="com.esoom.templeate.admin.service.FreeBoardVO">
+		select a.*, FORMAT(a.wdate, 'yyyy-MM-dd') AS formatted_date,
+					(SELECT COUNT(*)
+				     FROM KCC_EGIS.egis.TBL_FREE_TAIL b
+				     WHERE b.info_num = a.num) AS tail_count
+		 from KCC_EGIS.egis.TBL_FREE a
+		where 1=1 
+		and a.flag = 'Y'
+		and a.chk_del = 'N'
+		order by a.num desc
+	</select>
+	<select id="freeDetail" resultType="com.esoom.templeate.admin.service.FreeBoardVO">
+		select *,FORMAT(wdate, 'yyyy.MM.dd') AS formatted_date,
+		KCC_EGIS.egis.FN_MASK_ID(id) as id2,
+    	KCC_EGIS.egis.FN_MASK_NAME(writer) writer2
+		 from KCC_EGIS.egis.TBL_FREE
+		where num = #{num}
+	</select>
+	<select id="getFreeTailListCount" resultType="int">
+		select count(*) from (
+			select *,FORMAT(wdate , 'yyyy.MM.dd') AS formatted_date,
+		    FORMAT(wdate, 'HH:mm:ss') AS formatted_time
+		    from KCC_EGIS.egis.TBL_FREE_TAIL
+			where info_num = #{info_num}
+		) A 
+	</select>
+	<select id="freeTailList" resultType="com.esoom.templeate.admin.service.FreeTailVO">
+		SELECT * 
+			FROM (
+				select *,FORMAT(wdate , 'yyyy.MM.dd') AS formatted_date,
+			    FORMAT(wdate, 'HH:mm') AS formatted_time,
+			    KCC_EGIS.egis.FN_MASK_ID(id) as id2,
+			    KCC_EGIS.egis.FN_MASK_NAME(writer) writer2
+			    from KCC_EGIS.egis.TBL_FREE_TAIL
+				where info_num = #{info_num}
+				) A
+		ORDER BY num 
+	</select>
+	<select id="mypageFreeList" resultType="com.esoom.templeate.admin.service.FreeBoardVO">
+		select top 8 a.*,FORMAT(a.wdate, 'yyyy.MM.dd') AS formatted_date,
+		KCC_EGIS.egis.FN_MASK_NAME(writer) writer2,
+		ROW_NUMBER() OVER (ORDER BY a.num) AS rownum,
+		(SELECT COUNT(*)
+	     FROM KCC_EGIS.egis.TBL_FREE_TAIL b
+	     WHERE b.info_num = a.num) AS tail_count
+		 from KCC_EGIS.egis.TBL_FREE a 
+		where 1=1 
+		and a.chk_del = 'N'
+		and a.id = #{id}
+	</select>
+	<update id="mergeFree" parameterType="map">
+		merge into KCC_EGIS.egis.TBL_FREE A
+	using 
+		(
+			select #{num} AS num 
+				   ,#{subject} AS subject
+				   ,#{content} AS content
+				   ,#{id} AS id
+				   ,#{writer} AS writer
+				   ,#{ip} AS ip
+				   ,#{chk_m} AS chk_m
+		) B
+		on A.num = B.num
+		WHEN MATCHED THEN 
+			UPDATE set
+				    A.subject = B.subject
+				   ,A.content = B.content
+		   WHEN not MATCHED THEN 
+		   INSERT  (
+			   			subject
+			   		   ,content
+					   ,flag
+					   ,id
+					   ,writer
+					   ,ip
+					   ,wdate
+					   ,chk_del
+					   ,visited
+					   ,ref
+					   ,step
+					   ,ansnum
+					   ,tn
+					   ,pn
+					   ,recommend
+					   ,chk_m
+				   )
+			values (
+						B.subject
+			   		   ,B.content
+					   ,'N'
+					   ,B.id
+					   ,B.writer
+					   ,B.ip
+					   ,getdate()
+					   ,'N'
+					   ,0
+					   ,(SELECT ISNULL(MAX(ref), 0) + 1 FROM KCC_EGIS.egis.TBL_FREE)
+					   ,0
+					   ,0
+					   ,0
+					   ,0
+					   ,0
+					   ,B.chk_m
+					);
+	</update>
+	<update id="freeDelete" parameterType="com.esoom.templeate.admin.service.FreeBoardVO">
+		update KCC_EGIS.egis.TBL_FREE
+		set chk_del = 'Y'
+		where
+		num= #{num}
+	</update>
+	<insert id="contentWrite" parameterType="com.esoom.templeate.admin.service.FreeTailVO">
+		insert into KCC_EGIS.egis.TBL_FREE_TAIL (
+			 info_num, id, writer, content, ip, wdate  
+		)values(
+			 #{info_num}, #{id}, #{writer}, #{content}, #{ip}, getdate()
+		)
+	</insert>
+	<delete id="contentDelete" parameterType="com.esoom.templeate.admin.service.FreeTailVO">
+		delete from KCC_EGIS.egis.TBL_FREE_TAIL
+		where num = #{num}
+	</delete>
+</mapper>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MemberDAO">
+	<select id="getMember" resultType="com.esoom.templeate.admin.service.MemberVO">
+		select * from KCC_EGIS.egis.TBL_MEMBER 
+		where 1=1
+		<if test="id != null"> 
+			and id = #{id}
+		</if>
+		and chk_state = 'S'
+	</select>
+	<update id="loginUpdate" parameterType="com.esoom.templeate.admin.service.MemberVO">
+		update KCC_EGIS.egis.TBL_MEMBER
+		set login_date = CONVERT(VARCHAR(10), GETDATE(), 120)
+		    ,logindate = getdate()
+		where
+		num = #{num}
+	</update>
+	<select id="duplicateDi" resultType="com.esoom.templeate.admin.service.MemberVO">
+		<![CDATA[
+		SELECT * 
+		FROM KCC_EGIS.egis.TBL_MEMBER 
+		WHERE 1=1
+		  AND di = #{di}
+		  AND (out_date >= DATEADD(DAY, -30, GETDATE()) or (out_date <= GETDATE() and chk_state='S'))
+	   ]]>
+	</select>
+	<insert id="insertMember" parameterType="com.esoom.templeate.admin.service.MemberVO">
+		insert into KCC_EGIS.egis.TBL_MEMBER (
+			 id, sha_pwd, name, jumin, zipcode, addr, daddr, email, tel
+			,chk_email, chk_sms ,chk_grade , chk_state ,reg_date ,login_date,logindate,out_date
+			,pwd_date,ip,sex,di
+		)values(
+			 #{id}, #{pwd}, #{name}, #{jumin}, #{zipcode}, #{addr}, #{daddr}, #{email}, #{tel}
+			,#{chk_email}, 'N' , '10', 'S', getdate(), CONVERT(VARCHAR(10), GETDATE(), 120),getdate(),'1900-01-01 00:00:00'
+			,CONVERT(VARCHAR(10), GETDATE(), 120),#{ip},#{sex},#{di}
+		)
+	</insert>
+	<select id="duplicateMember" resultType="int">
+		select count(*) from KCC_EGIS.egis.TBL_MEMBER 
+		where 1=1 
+		<if test="id != null">
+			<if test='id != ""'>		
+				and id = #{id}
+			</if>
+		</if>
+		<if test="email != null">
+			<if test='email != ""'>			
+				and email = #{email}
+			</if>
+		</if>
+		<if test="num != null">
+			<if test='num != "0"'>
+				and num != #{num}
+			</if>
+		</if>
+	</select>
+</mapper>

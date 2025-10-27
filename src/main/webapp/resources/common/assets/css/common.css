@@ -399,6 +399,7 @@ html:not(.is-mobile) body :is(.bg_dark) *::-webkit-scrollbar-thumb {background: 
 .header_utils.sns .el_btn {--s: 1; --bg: #e6eaf2;}
 .header_utils.sns .el_btn img {height: 53.334%; transform: scale(var(--s));}
 .header_utils.sns .el_btn.in img {--s: 0.875;}
+.header_utils.sns .el_btn.yt img {height: 40.334% !important;}
 .header_utils.utils .el_btn {aspect-ratio: 1; color: var(--color); position: relative;}
 
 @media (max-width: 1024px) {

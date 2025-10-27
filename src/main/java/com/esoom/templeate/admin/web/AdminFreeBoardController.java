@@ -37,6 +37,7 @@ import com.esoom.templeate.common.Pagination;
 import com.esoom.templeate.common.service.CommonService;
 
 @Controller
+@RequestMapping("/cmsAdm")
 public class AdminFreeBoardController {
 	@Resource(name = "adminFreeService")
 	private AdminFreeService adminFreeService;
@@ -179,7 +180,7 @@ public class AdminFreeBoardController {
 
 	    String returnUrl = "";
 	    if (result > 0) {
-            returnUrl = "redirect:/fFreeList.do";
+            returnUrl = "redirect:/cmsAdm/fFreeList.do";
 	    } else {
     		returnUrl = "admin/board/fFreeList";
 	    }

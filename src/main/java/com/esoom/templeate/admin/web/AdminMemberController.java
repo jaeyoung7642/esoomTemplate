@@ -26,6 +26,7 @@ import com.esoom.templeate.common.ShaUtil;
 import com.esoom.templeate.common.service.CommonService;
 
 @Controller
+@RequestMapping("/cmsAdm")
 public class AdminMemberController {
 	@Resource(name = "adminMemeberService")
 	private AdminMemberService adminMemeberService;

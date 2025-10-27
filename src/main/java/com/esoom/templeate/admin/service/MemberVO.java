@@ -42,7 +42,7 @@ public class MemberVO implements Serializable {
 	
 	private String zipcode_old = "";
 	
-	private String add_old = "";
+	private String addr_old = "";
 	
 	private String daddr_old = "";
 	
@@ -104,7 +104,82 @@ public class MemberVO implements Serializable {
 	
 	private String delete_reason = "";
 	
+	private String fistNum = "";
+	private String middleNum = "";
+	private String lastNum = "";
 	
+	
+	private String yyyy ="";
+	private String mm = "";
+	private String dd = "";
+	
+	private String email_id = "";
+	private String email_domain = "";
+	
+	public String getFistNum() {
+		return fistNum;
+	}
+
+	public void setFistNum(String fistNum) {
+		this.fistNum = fistNum;
+	}
+
+	public String getMiddleNum() {
+		return middleNum;
+	}
+
+	public void setMiddleNum(String middleNum) {
+		this.middleNum = middleNum;
+	}
+
+	public String getLastNum() {
+		return lastNum;
+	}
+
+	public void setLastNum(String lastNum) {
+		this.lastNum = lastNum;
+	}
+
+	public String getYyyy() {
+		return yyyy;
+	}
+
+	public void setYyyy(String yyyy) {
+		this.yyyy = yyyy;
+	}
+
+	public String getMm() {
+		return mm;
+	}
+
+	public void setMm(String mm) {
+		this.mm = mm;
+	}
+
+	public String getDd() {
+		return dd;
+	}
+
+	public void setDd(String dd) {
+		this.dd = dd;
+	}
+
+	public String getEmail_id() {
+		return email_id;
+	}
+
+	public void setEmail_id(String email_id) {
+		this.email_id = email_id;
+	}
+
+	public String getEmail_domain() {
+		return email_domain;
+	}
+
+	public void setEmail_domain(String email_domain) {
+		this.email_domain = email_domain;
+	}
+
 	public String getPwd() {
 		return pwd;
 	}
@@ -185,12 +260,12 @@ public class MemberVO implements Serializable {
 		this.zipcode_old = zipcode_old;
 	}
 
-	public String getAdd_old() {
-		return add_old;
+	public String getAddr_old() {
+		return addr_old;
 	}
 
-	public void setAdd_old(String add_old) {
-		this.add_old = add_old;
+	public void setAddr_old(String addr_old) {
+		this.addr_old = addr_old;
 	}
 
 	public String getDaddr_old() {

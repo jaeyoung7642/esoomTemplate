@@ -43,6 +43,22 @@ public class FreeTailVO implements Serializable {
 	/** 등록일 */
 	private String wdate = "";
 	private String formatted_date = "";
+	private String formatted_time = "";
+	private String id2 ="";
+	
+	
+	public String getId2() {
+		return id2;
+	}
+	public void setId2(String id2) {
+		this.id2 = id2;
+	}
+	public String getFormatted_time() {
+		return formatted_time;
+	}
+	public void setFormatted_time(String formatted_time) {
+		this.formatted_time = formatted_time;
+	}
 	public Integer getNum() {
 		return num;
 	}

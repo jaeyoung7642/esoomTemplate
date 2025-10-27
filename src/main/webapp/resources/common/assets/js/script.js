@@ -10,8 +10,8 @@ updateCountdown1();
 		});
 	}
 
-	loadPage('app-header', 'header #header', headerEvt); // 선택요소, 로드요소, 이벤트(추가)
-	loadPage('app-footer', 'footer #footer', footerEvt); 
+	loadPage('app-header', 'header.do #header', headerEvt); // 선택요소, 로드요소, 이벤트(추가)
+	loadPage('app-footer', 'footer.do #footer', footerEvt); 
 });
 
 // header event

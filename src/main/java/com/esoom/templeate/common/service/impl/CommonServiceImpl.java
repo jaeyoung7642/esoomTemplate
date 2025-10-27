@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.HtmlUtils;
 
 import com.esoom.templeate.common.service.CommonService;
 
@@ -158,5 +159,10 @@ public class CommonServiceImpl implements CommonService {
 	        ip = request.getRemoteAddr();
 	    }
 	    return ip;
+	}
+	@Override
+	public String HtmlUnescape(String str) throws Exception {
+		str = HtmlUtils.htmlUnescape(str);
+		return str;
 	}
 }

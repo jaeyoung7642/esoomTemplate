@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.esoom.templeate.admin.service.AdminMovieService;
@@ -18,6 +19,7 @@ import com.esoom.templeate.common.Pagination;
 import com.esoom.templeate.common.service.CommonService;
 
 @Controller
+@RequestMapping("/cmsAdm")
 public class AdminMovieController {
 	@Resource(name = "adminNoticeService")
 	private AdminNoticeService adminNoticeService;

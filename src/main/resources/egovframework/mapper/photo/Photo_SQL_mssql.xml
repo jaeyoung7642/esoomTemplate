@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PhotoDAO">
+
+
+    <select id="photoHome" parameterType="com.esoom.templeate.admin.service.BoardVO" resultType="com.esoom.templeate.admin.service.BoardVO">
+        select top 5 * from KCC_EGIS.egis.TBL_NEWS
+		where
+			part = 'photo'
+		and flag = 'N'
+		order by num desc
+    </select>
+    <select id="photoList" resultType="com.esoom.templeate.admin.service.BoardPhotoVO">
+		SELECT * 
+			FROM (
+				SELECT 
+				    a.*,FORMAT(wdate, 'yyyy-MM-dd') AS formatted_date, 
+				    (SELECT COUNT(*)
+				     FROM KCC_EGIS.egis.TBL_NEWS_PHOTO b
+				     WHERE b.info_num = a.num) AS photo_count
+				FROM 
+				    KCC_EGIS.egis.TBL_NEWS a
+				WHERE 1=1
+				and flag = 'N'
+				    <if test="part != null">
+				    	and a.part = #{part}
+				    </if>
+				    <if test="searchKeyword != null">
+						<if test='searchKeyword != ""'>
+							and (a.subject like CONCAT('%', #{searchKeyword}, '%') or a.keyword_tag like CONCAT('%', #{searchKeyword}, '%'))
+						</if>
+					</if>
+					<if test="sdate != null and edate !=null">
+						<if test='sdate != "" and edate !=""'>
+						and CONVERT(char(10),a.wdate,23) BETWEEN #{sdate} AND #{edate}
+						</if>
+					</if>
+				) A
+		<if test='otype == "num"'>
+				ORDER BY num desc
+		</if>
+		<if test='otype != "num"'>
+			ORDER BY ${otype} DESC
+		</if>
+	</select>
+	<select id="getPhotoListCount" resultType="int">
+		select count(*) from (
+		SELECT 
+		    a.*, 
+		    (SELECT COUNT(*)
+		     FROM KCC_EGIS.egis.TBL_NEWS_PHOTO b
+		     WHERE b.info_num = a.num) AS photo_count
+		FROM 
+		    KCC_EGIS.egis.TBL_NEWS a
+		WHERE 1=1
+		and flag = 'N'
+	    <if test="part != null">
+		    	and a.part = #{part}
+	    </if>
+		<if test="searchKeyword != null">
+			<if test='searchKeyword != ""'>
+				and (a.subject like CONCAT('%', #{searchKeyword}, '%') or a.keyword_tag like CONCAT('%', #{searchKeyword}, '%'))
+			</if>
+		</if>
+		<if test="sdate != null and edate !=null">
+			<if test='sdate != "" and edate !=""'>
+			and CONVERT(char(10),a.wdate,23) BETWEEN #{sdate} AND #{edate}
+			</if>
+		</if>
+		) A 
+	</select>
+	<select id="photoDetail" resultType="com.esoom.templeate.admin.service.BoardVO">
+		select *
+		,FORMAT(wdate, 'yyyy-MM-dd') AS formatted_date
+		from KCC_EGIS.egis.TBL_NEWS
+		where
+		num = #{num}
+	</select>
+	<select id="footPhotoList" resultType="com.esoom.templeate.admin.service.BoardVO">
+		select top 10 * from KCC_EGIS.egis.TBL_NEWS
+		where part = #{part}  
+		and flag = 'N'
+		order by num desc
+	</select>
+	<select id="photoChildList" resultType="com.esoom.templeate.admin.service.BoardPhotoVO">
+		select num,photofile,info_num,FORMAT(wdate, 'yyyy-MM-dd') AS formatted_date from KCC_EGIS.egis.TBL_NEWS_PHOTO
+	   where info_num = #{num}
+	</select>
+</mapper>

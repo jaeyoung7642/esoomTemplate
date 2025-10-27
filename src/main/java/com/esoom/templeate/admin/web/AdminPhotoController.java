@@ -25,6 +25,7 @@ import com.esoom.templeate.common.Pagination;
 import com.esoom.templeate.common.service.CommonService;
 
 @Controller
+@RequestMapping("/cmsAdm")
 public class AdminPhotoController {
 	@Resource(name = "adminNoticeService")
 	private AdminNoticeService adminNoticeService;
@@ -173,7 +174,7 @@ public class AdminPhotoController {
 			}
 	    }
 
-	    return "redirect:/mPhotoList.do";
+	    return "redirect:/cmsAdm/mPhotoList.do";
 	}
 	@ResponseBody
 	@RequestMapping(value = "/deleteBoardPhoto.do", method = RequestMethod.GET)

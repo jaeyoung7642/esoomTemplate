@@ -28,6 +28,7 @@ import com.esoom.templeate.admin.service.PopupVO;
 import com.esoom.templeate.admin.service.SlideVO;
 
 @Controller
+@RequestMapping("/cmsAdm")
 public class AdminEtcController {
 	@Resource(name = "adminEtcService")
 	private AdminEtcService adminEtcService;
@@ -116,7 +117,7 @@ public class AdminEtcController {
 
 	    String returnUrl = "";
 	    if (result > 0) {
-            returnUrl = "redirect:/ePopupList.do";
+            returnUrl = "redirect:/cmsAdm/ePopupList.do";
 	    } else {
     		returnUrl = "admin/etc/ePopupList";
 	    }
@@ -198,7 +199,7 @@ public class AdminEtcController {
 
 	    String returnUrl = "";
 	    if (result > 0) {
-            returnUrl = "redirect:/eMainSlideList.do";
+            returnUrl = "redirect:/cmsAdm/eMainSlideList.do";
 	    } else {
     		returnUrl = "admin/etc/eMainSlideList";
 	    }

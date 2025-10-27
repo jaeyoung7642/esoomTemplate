@@ -24,6 +24,7 @@ import com.esoom.templeate.common.Pagination;
 import com.esoom.templeate.common.service.CommonService;
 
 @Controller
+@RequestMapping("/cmsAdm")
 public class AdminNoticeController {
 	@Resource(name = "adminNoticeService")
 	private AdminNoticeService adminNoticeService;
@@ -126,10 +127,10 @@ public class AdminNoticeController {
 	    String returnUrl = "";
 	    if (result > 0) {
 	        switch (boardVO.getPart()) {
-	            case "news": returnUrl = "redirect:/mNewsList.do"; break;
-	            case "movie": returnUrl = "redirect:/mMovieList.do"; break;
-	            case "notice": returnUrl = "redirect:/fNoticeList.do"; break;
-	            case "event": returnUrl = "redirect:/fEventList.do"; break;
+	            case "news": returnUrl = "redirect:/cmsAdm/mNewsList.do"; break;
+	            case "movie": returnUrl = "redirect:/cmsAdm/mMovieList.do"; break;
+	            case "notice": returnUrl = "redirect:/cmsAdm/fNoticeList.do"; break;
+	            case "event": returnUrl = "redirect:/cmsAdm/fEventList.do"; break;
 	        }
 	    } else {
 	        switch (boardVO.getPart()) {

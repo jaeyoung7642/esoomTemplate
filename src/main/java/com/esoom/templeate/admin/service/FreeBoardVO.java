@@ -75,8 +75,15 @@ public class FreeBoardVO implements Serializable {
 	private String searchTailWriter = "N";
 	
 	private Integer listpage = 1;
+	private String id2 = "";
 	
 	
+	public String getId2() {
+		return id2;
+	}
+	public void setId2(String id2) {
+		this.id2 = id2;
+	}
 	public Integer getListpage() {
 		return listpage;
 	}

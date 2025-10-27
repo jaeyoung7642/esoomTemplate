@@ -26,7 +26,7 @@
 			return false;
 		}
 		$.ajax({
-        	url: "/esoomTemplate/changePwd.do",
+        	url: "/cmsAdm/changePwd.do",
         	type: 'POST',
 			data: {
 				num : num,

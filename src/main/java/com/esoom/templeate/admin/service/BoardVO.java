@@ -66,6 +66,7 @@ public class BoardVO implements Serializable {
 		공지사항 => Y: 공지 / 없음: 공지아님
 	 **/
 	private String wtype = "";
+	private String otype = "";
 	/** 링크 URL **/
 	private String linkurl = "";
 	/** 기타
@@ -86,9 +87,33 @@ public class BoardVO implements Serializable {
 	private String sdateFormat ="";
 	private String edateFormat ="";
 	
+	private Integer tail_count = 0;
+	private String content2 = "";
+	
+	
+	
+	
+	public String getContent2() {
+		return content2;
+	}
+	public void setContent2(String content2) {
+		this.content2 = content2;
+	}
+	public Integer getTail_count() {
+		return tail_count;
+	}
+	public void setTail_count(Integer tail_count) {
+		this.tail_count = tail_count;
+	}
 	private List<BoardPhotoVO> photoList; 
 	
 	
+	public String getOtype() {
+		return otype;
+	}
+	public void setOtype(String otype) {
+		this.otype = otype;
+	}
 	public List<BoardPhotoVO> getPhotoList() {
 		return photoList;
 	}
@@ -291,5 +316,15 @@ public class BoardVO implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
+	@Override
+	public String toString() {
+		return "BoardVO [currentPage=" + currentPage + ", limit=" + limit + ", searchKeyword=" + searchKeyword
+				+ ", rownum=" + rownum + ", num=" + num + ", subject=" + subject + ", content=" + content + ", summary="
+				+ summary + ", img1=" + img1 + ", img2=" + img2 + ", img3=" + img3 + ", visited=" + visited + ", flag="
+				+ flag + ", wdate=" + wdate + ", formatted_date=" + formatted_date + ", part=" + part + ", wtype="
+				+ wtype + ", otype=" + otype + ", linkurl=" + linkurl + ", etc1=" + etc1 + ", etc2=" + etc2 + ", tags="
+				+ tags + ", sDay=" + sDay + ", sTime=" + sTime + ", sMinute=" + sMinute + ", eDay=" + eDay + ", eTime="
+				+ eTime + ", eMinute=" + eMinute + ", sdate=" + sdate + ", edate=" + edate + ", state=" + state
+				+ ", sdateFormat=" + sdateFormat + ", edateFormat=" + edateFormat + ", photoList=" + photoList + "]";
+	}
 }

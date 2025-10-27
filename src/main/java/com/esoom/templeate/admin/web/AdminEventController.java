@@ -26,6 +26,7 @@ import com.esoom.templeate.common.Pagination;
 import com.esoom.templeate.common.service.CommonService;
 
 @Controller
+@RequestMapping("/cmsAdm")
 public class AdminEventController {
 	@Resource(name = "adminEventService")
 	private AdminEventService adminEventService;

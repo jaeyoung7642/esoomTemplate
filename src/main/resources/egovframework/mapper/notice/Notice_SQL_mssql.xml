@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="NoticeDAO">
+    <select id="noticeList" resultType="com.esoom.templeate.admin.service.BoardVO">
+		SELECT * , ROW_NUMBER() OVER (ORDER BY a.num) AS rownum
+			FROM (	
+					select a.*,FORMAT(a.wdate, 'yyyy.MM.dd') AS formatted_date,
+					ROW_NUMBER() OVER (ORDER BY a.num) AS rownum,
+					(SELECT COUNT(*)
+				     FROM KCC_EGIS.egis.TBL_NEWS_TAIL b
+				     WHERE b.info_num = a.num) AS tail_count
+					 from KCC_EGIS.egis.TBL_NEWS a 
+					where 1=1 
+					and a.part = 'notice'
+					and a.flag = 'N'
+					<if test="searchKeyword != null">
+						<if test='searchKeyword != ""'>
+							and (a.subject like CONCAT('%', #{searchKeyword}, '%') or a.content like CONCAT('%', #{searchKeyword}, '%'))
+						</if>
+					</if>
+					) A 
+			ORDER BY num desc
+	</select>
+	<select id="getNoticeListCount" resultType="int">
+		select count(*) from (
+		select a.*,FORMAT(a.wdate, 'yyyy.MM.dd') AS reg_date from KCC_EGIS.egis.TBL_NEWS a 
+		where 1=1 
+		and a.part = 'notice'
+		and a.flag = 'N'
+		<if test="searchKeyword != null">
+			<if test='searchKeyword != ""'>
+				and (a.subject like CONCAT('%', #{searchKeyword}, '%') or a.content like CONCAT('%', #{searchKeyword}, '%'))
+			</if>
+		</if>
+		) A 
+	</select>
+	<select id="noticeDetail" resultType="com.esoom.templeate.admin.service.BoardVO">
+		select *
+		,FORMAT(wdate, 'yyyy-MM-dd') AS formatted_date
+		from KCC_EGIS.egis.TBL_NEWS
+		where
+		num = #{num}
+	</select>
+	<select id="prevDetail" resultType="com.esoom.templeate.admin.service.BoardVO">
+		select TOP 1 a.*,FORMAT(a.wdate, 'yyyy.MM.dd') AS formatted_date,
+					(SELECT COUNT(*)
+				     FROM KCC_EGIS.egis.TBL_NEWS_TAIL b
+				     WHERE b.info_num = a.num) AS tail_count
+					 from KCC_EGIS.egis.TBL_NEWS a 
+					where 1=1 
+					and a.part = #{part}
+					<![CDATA[and a.num < #{num}]]>
+					and a.flag = 'N'
+					ORDER BY a.num DESC
+	</select>
+	<select id="nextDetail" resultType="com.esoom.templeate.admin.service.BoardVO">
+		select TOP 1 a.*,FORMAT(a.wdate, 'yyyy.MM.dd') AS formatted_date,
+					(SELECT COUNT(*)
+				     FROM KCC_EGIS.egis.TBL_NEWS_TAIL b
+				     WHERE b.info_num = a.num) AS tail_count
+					 from KCC_EGIS.egis.TBL_NEWS a 
+					where 1=1 
+					and a.part = #{part}
+					<![CDATA[and a.num > #{num}]]>
+					and a.flag = 'N'
+					ORDER BY a.num
+	</select>
+	<select id="boardTailList" resultType="com.esoom.templeate.admin.service.BoardTailVO">
+		SELECT * 
+			FROM (
+				select *,FORMAT(wdate , 'yyyy.MM.dd') AS formatted_date,
+			    FORMAT(wdate, 'HH:mm') AS formatted_time,
+			    KCC_EGIS.egis.FN_MASK_ID(id) as id2,
+		    	KCC_EGIS.egis.FN_MASK_NAME(writer) writer2
+			    from KCC_EGIS.egis.TBL_NEWS_TAIL
+				where info_num = #{info_num}
+				) A
+		ORDER BY num 
+	</select>
+	<select id="getBoardTailListCount" resultType="int">
+		select count(*) from (
+			select *,FORMAT(wdate , 'yyyy.MM.dd') AS formatted_date,
+		    FORMAT(wdate, 'HH:mm') AS formatted_time 
+		    from KCC_EGIS.egis.TBL_NEWS_TAIL
+			where info_num = #{info_num}
+		) A 
+	</select>
+	<select id="mypageNoticeList" resultType="com.esoom.templeate.admin.service.BoardVO">
+		select top 4 a.*,FORMAT(a.wdate, 'yyyy.MM.dd') AS formatted_date
+		,(SELECT COUNT(*)
+				     FROM KCC_EGIS.egis.TBL_NEWS_TAIL b
+				     WHERE b.info_num = a.num) AS tail_count
+		 from KCC_EGIS.egis.TBL_NEWS a 
+		where a.part = 'notice' 
+		and a.flag = 'N'
+		order by a.num desc
+	</select>
+	<insert id="contentWrite" parameterType="com.esoom.templeate.admin.service.BoardTailVO">
+			insert into KCC_EGIS.egis.TBL_NEWS_TAIL (
+			 info_num, id, writer, content, ip, wdate, part 
+			)values(
+				 #{info_num}, #{id}, #{writer}, #{content}, #{ip}, getdate(), #{part}
+			)
+	</insert>
+	<delete id="contentDelete" parameterType="com.esoom.templeate.admin.service.BoardTailVO">
+		delete from KCC_EGIS.egis.TBL_NEWS_TAIL
+		where num = #{num}
+	</delete>
+</mapper>
