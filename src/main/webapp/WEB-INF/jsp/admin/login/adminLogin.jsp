@@ -18,7 +18,7 @@
 	<div id="wrap">
 		<!-- header -->
 		<header class="login_header">
-			<img src="/resources/common/admin/images/common/logo.svg" alt="KCC EGIS 로고" class="logo">
+			<img src="<c:url value="/resources/common/admin/images/common/logo.svg"/>" alt="KCC EGIS 로고" class="logo">
 			<h1 class="heading">KCC 이지스 프로농구단 홈페이지 관리자</h1>
 			<p class="sub">KCC EGIS BASKETBALL CLUB WEBSITE ADMIN</p>
 		</header>

@@ -18,24 +18,24 @@
 	<meta property="og:image" content="https://kccegis.com/resources/common/images/common/kcc_og_thum.jpg">
 	<meta property="og:description" content="부산KCC이지스 공식 홈페이지">
 	<title>회원가입 : KCC이지스 프로농구단</title>
-	<link rel="stylesheet preload" as="style" crossorigin href="/resources/common/assets/font/font.css" />
-	<link rel="shortcut icon" href="/resources/common/images/common/favicon_kccegis.png">
-	<link rel="stylesheet" href="/resources/common/assets/css/swiper-bundle.css">
-	<link rel="stylesheet" href="/resources/common/assets/css/common.css">
-	<link rel="stylesheet" href="/resources/common/assets/css/sub.css"> <!-- sub only -->
-	<link rel="stylesheet" href="/resources/common/assets/css/member.css"> <!-- 디렉토리  member only -->
-	<script src="/resources/common/assets/js/jquery-3.6.0.min.js"></script>
-	<script src="/resources/common/assets/js/jquery.scrollDetector.min.js" defer></script>
-	<script src="/resources/common/assets/js/lenis.min.js" defer></script>
-	<script src="/resources/common/assets/js/swiper-bundle.min.js" defer></script>
-	<script src="/resources/common/assets/js/jquery.kinetic.min.js" defer></script>
-	<script src="/resources/common/assets/js/common.js" defer></script> 
-	<script src="/resources/common/assets/js/jquery.nice-select.min.js" defer></script> <!-- sub only -->
-	<script src="/resources/common/assets/js/sub.js" defer></script> <!-- sub only -->
-	<script src="/resources/common/assets/js/link.js" defer></script>
-	<script src="/resources/common/assets/js/script.js" defer></script> <!-- 개발용 -->
-	<script src="/resources/common/assets/js/gsap.min.js" defer></script> <!-- main only -->
-	<script src="/resources/common/assets/js/ScrollTrigger.min.js" defer></script> <!-- main only -->
+		<link rel="stylesheet preload" as="style" crossorigin href="<c:url value="/resources/common/assets/font/font.css"/>" />
+	<link rel="shortcut icon" href="<c:url value="/resources/common/images/common/favicon_kccegis.png"/>">
+	<link rel="stylesheet" href="<c:url value="/resources/common/assets/css/swiper-bundle.css"/>">
+	<link rel="stylesheet" href="<c:url value="/resources/common/assets/css/common.css"/>">
+	<link rel="stylesheet" href="<c:url value="/resources/common/assets/css/sub.css"/>"> <!-- sub only -->
+	<link rel="stylesheet" href="<c:url value="/resources/common/assets/css/member.css"/>"> <!-- 디렉토리  member only -->
+	<script src="<c:url value="/resources/common/assets/js/jquery-3.6.0.min.js"/>"></script>
+	<script src="<c:url value="/resources/common/assets/js/jquery.scrollDetector.min.js"/>" defer></script>
+	<script src="<c:url value="/resources/common/assets/js/lenis.min.js"/>" defer></script>
+	<script src="<c:url value="/resources/common/assets/js/swiper-bundle.min.js"/>" defer></script>
+	<script src="<c:url value="/resources/common/assets/js/jquery.kinetic.min.js"/>" defer></script>
+	<script src="<c:url value="/resources/common/assets/js/common.js"/>" defer></script> 
+	<script src="<c:url value="/resources/common/assets/js/jquery.nice-select.min.js"/>" defer></script> <!-- sub only -->
+	<script src="<c:url value="/resources/common/assets/js/sub.js"/>" defer></script> <!-- sub only -->
+	<script src="<c:url value="/resources/common/assets/js/link.js"/>" defer></script>
+	<script src="<c:url value="/resources/common/assets/js/script.js"/>" defer></script> <!-- 개발용 -->
+	<script src="<c:url value="/resources/common/assets/js/gsap.min.js"/>" defer></script> <!-- main only -->
+	<script src="<c:url value="/resources/common/assets/js/ScrollTrigger.min.js"/>" defer></script> <!-- main only -->
 	<script>
 	window.name="Parent_window";
 	var popupWindow = null;
